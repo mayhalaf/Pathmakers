@@ -34,6 +34,49 @@ app.get('/users', async (req, res) => {
     }
 });
 
+// דוגמה לנתיב PUT לעדכון נתוני משתמש
+app.put('/users/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const updatedData = req.body;
+        const users = await getUsers();
+        const userIndex = users.findIndex(user => user.id === parseInt(id));
+
+        if (userIndex !== -1) {
+            users[userIndex] = { ...users[userIndex], ...updatedData };
+            await fs.writeFile('data/users.json', JSON.stringify(users, null, 2));
+            res.json({ message: 'User updated successfully', user: users[userIndex] });
+        } else {
+            res.status(404).json({ error: 'User not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Unable to update user' });
+    }
+});
+
+// Route למחיקת משתמש לפי ID
+app.delete('/users/:id', async (req, res) => {
+    try {
+        const { id } = req.params; // ID של המשתמש למחיקה
+        const users = await getUsers(); // קריאת כל המשתמשים
+
+        // מציאת המשתמש עם ה-ID המתאים
+        const updatedUsers = users.filter(user => user.id !== parseInt(id));
+
+        if (users.length === updatedUsers.length) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // שמירה של הרשימה המעודכנת לקובץ
+        await fs.writeFile('data/users.json', JSON.stringify(updatedUsers, null, 2));
+
+        res.json({ message: `User with ID ${id} deleted successfully.` });
+    } catch (error) {
+        console.error('Error deleting user:', error);
+        res.status(500).json({ error: 'Unable to delete user' });
+    }
+});
+
 // Route לאימות משתמש
 app.post('/login', async (req, res) => {
     try {
