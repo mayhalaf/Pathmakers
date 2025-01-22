@@ -93,6 +93,24 @@ app.post('/login', async (req, res) => {
         res.status(500).json({ error: 'Error during login process' });
     }
 });
+// Route להוספת משתמש חדש
+app.post('/users', async (req, res) => {
+    try {
+        const newUser = req.body;
+        const users = await getUsers();
+        
+        // בדיקה אם המשתמש כבר קיים לפי ID
+        if (users.some(user => user.id === newUser.id)) {
+            return res.status(400).json({ error: 'User with this ID already exists' });
+        }
+        
+        users.push(newUser);
+        await fs.writeFile('data/users.json', JSON.stringify(users, null, 2));
+        res.status(201).json({ message: 'User added successfully', user: newUser });
+    } catch (error) {
+        res.status(500).json({ error: 'Unable to add user' });
+    }
+});
 
 // Route לקרוא את הערים
 app.get('/cities', async (req, res) => {
