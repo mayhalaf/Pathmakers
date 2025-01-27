@@ -1,10 +1,9 @@
 import React from 'react';
 import '../components/HomePage.css';
 
-
-const HomePage = () => {
+export default function HomePage() {
   return (
-    <div className="container">
+    <div className="home-container">
       {/* Left Panel */}
       <div className="split-panel left-panel">
         {/* Video Background */}
@@ -40,5 +39,3 @@ const HomePage = () => {
     </div>
   );
 };
-
-export default HomePage;
