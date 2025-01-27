@@ -3,7 +3,7 @@
     color: white;
     padding: 20px 0;
     text-align: center;
-    position: fixed;
+    position: inherit;
     bottom: 0;
     width: 100%;
   }
@@ -19,8 +19,4 @@
     color: #f39c12;
   }
   
-  .content {
-    padding: 500px 50px;
-    text-align: center;
-  }
-  
+ 

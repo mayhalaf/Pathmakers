@@ -1,18 +1,19 @@
 import React from "react";
-import "./Header.css";  // Import the CSS file for styles
-import Image20250119205452 from "../assets/Image20250119205452.png";  // Ensure the image path is correct
+import { Link } from "react-router-dom";
+import "./Header.css";
+import logo from "../assets/Image20250119205452.png";
 
 const Header = () => {
   return (
     <header className="header">
       <div className="logo">
-        <img src={Image20250119205452} alt="Logo" />
+        <img src={logo} alt="Logo" />
       </div>
       <nav>
-        <a href="#home">Home</a>
-        <a href="#about">About</a>
-        <a href="#services">Services</a>
-        <a href="#contact">Contact</a>
+        <Link to="/">Home</Link>
+        <Link to="/about">About</Link>
+        <Link to="/chat">Chat</Link>
+        <Link to="/login">Login</Link>
       </nav>
       <button className="btn-primary">Sign Up</button>
     </header>
