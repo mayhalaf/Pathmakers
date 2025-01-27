@@ -10,5 +10,11 @@
     "username": "newuser",
     "password": "securepassword",
     "email": "newuser@example.com"
+  },
+  {
+    "id": 8,
+    "username": "newuser",
+    "password": "securepassword",
+    "email": "newuser@example.com"
   }
 ]

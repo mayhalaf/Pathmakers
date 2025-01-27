@@ -105,7 +105,7 @@ app.post('/users', async (req, res) => {
         }
         
         users.push(newUser);
-        await fs.writeFile('data/users.json', JSON.stringify(users, null, 2));
+        await fs.writeFile('./data/users.json', JSON.stringify(users, null, 2));
         res.status(201).json({ message: 'User added successfully', user: newUser });
     } catch (error) {
         res.status(500).json({ error: 'Unable to add user' });
