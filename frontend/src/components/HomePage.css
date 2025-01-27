@@ -2,8 +2,9 @@
 .home-container {
   display: flex;
   flex-direction: row;
-  height: calc(100vh - 100px); /* Adjust based on header/footer height */
+  min-height: calc(100vh - 100px); /* Adjust dynamically */
   width: 100%;
+  overflow: hidden;
 }
 
 /* Left Panel */
@@ -14,25 +15,41 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
   padding: 20px;
   box-sizing: border-box;
+  position: relative;
+  z-index: 2; /* Ensure content stays above the video */
 }
 
 .content-overlay {
   text-align: center;
+  position: relative;
+  z-index: 2;
 }
 
-/* Right Panel */
+/* Right Panel with video */
 .right-panel {
   flex: 1;
   background-color: #f8f9fa;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position: relative;
+  overflow: hidden; /* Ensures no overflow from video */
 }
 
+/* Video Styling to cover the right panel completely */
+.bg-video {
+  position: absolute;
+  top: 0;
+  left: -10%; /* Moves video slightly to hide from left panel */
+  width: 120%;  /* Expands video beyond container to cover split */
+  height: 100%;
+  object-fit: cover;
+  z-index: 1; /* Ensures video stays behind the content */
+}
+
+/* Content Wrapper */
 .content-wrapper {
+  position: relative;
+  z-index: 2;
   text-align: center;
   padding: 40px;
 }
@@ -50,6 +67,7 @@
   margin: 0 10px;
   font-size: 16px;
   font-weight: bold;
+  transition: all 0.3s ease-in-out;
 }
 
 .login-btn {
@@ -57,9 +75,17 @@
   color: white;
 }
 
+.login-btn:hover {
+  background-color: #003955;
+}
+
 .signup-btn {
   background-color: #ff6b6b;
   color: white;
+}
+
+.signup-btn:hover {
+  background-color: #d44f4f;
 }
 
 /* Footer links */
@@ -82,5 +108,23 @@
   .home-container {
     flex-direction: column;
     height: auto;
+  }
+
+  .left-panel, .right-panel {
+    flex: 1 1 auto;
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .bg-video {
+    left: 0;
+    width: 100%;
+    height: auto;
+  }
+
+  .btn {
+    width: 100%;
+    margin-bottom: 10px;
   }
 }
