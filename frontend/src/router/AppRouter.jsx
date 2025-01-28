@@ -7,7 +7,8 @@ import PersonalArea from "../pages/PersonalArea";
 import Chat from "../pages/Chat";
 import DownloadApp from "../pages/DownloadApp";
 import Video from "../pages/Video";
-
+import Signup from "../pages/Signup";
+Signup
 let isAuth = true;  // Simulate authentication
 
 export const Router = createBrowserRouter([
@@ -18,5 +19,6 @@ export const Router = createBrowserRouter([
     { path: "/personal-area", element: isAuth ? <PersonalArea /> : <Navigate to="/login" /> },
     { path: "/chat-ai", element: <Chat /> },
     { path: "/Video", element: <Video /> },
-    { path: "/download", element: <DownloadApp /> },
+    { path: "/Signup", element: <Signup /> },
+    { path: "/DownloadApp", element: <DownloadApp /> },
 ]);
