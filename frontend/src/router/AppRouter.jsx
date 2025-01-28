@@ -17,7 +17,7 @@ export const Router = createBrowserRouter([
     { path: "/login", element: <Login /> },
     { path: "/register", element: <Register /> },
     { path: "/personal-area", element: isAuth ? <PersonalArea /> : <Navigate to="/login" /> },
-    { path: "/chat-ai", element: <Chat /> },
+    { path: "/chat", element: <Chat /> },
     { path: "/Video", element: <Video /> },
     { path: "/Signup", element: <Signup /> },
     { path: "/DownloadApp", element: <DownloadApp /> },
