@@ -88,20 +88,7 @@
   background-color: #d44f4f;
 }
 
-/* Footer links */
-.footer-links {
-  margin-top: 30px;
-}
 
-.footer-links a {
-  color: #004e75;
-  text-decoration: none;
-}
-
-.footer-links .separator {
-  margin: 0 10px;
-  color: #555;
-}
 
 /* Responsive Design */
 @media (max-width: 768px) {

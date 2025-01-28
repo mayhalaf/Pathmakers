@@ -11,6 +11,7 @@ export default function Navbar() {
                 <li><Link to="/register">register</Link></li>
                 <li><Link to="/chat-ai">register</Link></li>
                 <li><Link to="/personal-area">Personal Area</Link></li>
+                <li><Link to="/Video"> Video</Link></li>
                 <li><Link to="/download">Download</Link></li>
             </ul>
         </nav>

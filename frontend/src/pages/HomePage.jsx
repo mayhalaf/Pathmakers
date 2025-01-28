@@ -26,11 +26,7 @@ export default function HomePage() {
             <button className="btn login-btn">Log in</button>
             <button className="btn signup-btn">Sign up</button>
           </div>
-          <div className="footer-links">
-            <a href="/" onClick={(e) => e.preventDefault()}>Terms of use</a>
-            <span className="separator">|</span>
-            <a href="/" onClick={(e) => e.preventDefault()}>Privacy policy</a>
-          </div>
+         
         </div>
       </div>
     </div>

@@ -36,12 +36,6 @@ h1::after {
     border-radius: 2px;
 }
 
-p {
-    font-size: 1.1rem;
-    margin: 20px 0;
-    text-align: justify;
-    line-height: 1.8;
-}
 
 /* Animation */
 @keyframes fadeIn {
@@ -55,18 +49,40 @@ p {
     }
 }
 
-/* Responsive Design for Mobile */
-@media (max-width: 768px) {
+/* Responsive Design for iPhones */
+@media (max-width: 430px) {
     .about-container {
-        margin: 15px;
-        padding: 20px;
+        margin: 15px 10px;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 
     h1 {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
     }
 
     p {
-        font-size: 1rem;
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+
+    body {
+        line-height: 1.4;
+    }
+}
+
+/* Extra Small Screens (e.g., iPhone SE) */
+@media (max-width: 360px) {
+    .about-container {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 1.2rem;
+    }
+
+    p {
+        font-size: 0.9rem;
     }
 }

@@ -9,7 +9,7 @@ import Register from "./pages/Register";
 import PersonalArea from "./pages/PersonalArea";
 import Chat from "./pages/Chat";
 import DownloadApp from "./pages/DownloadApp";
-
+import Video from "./pages/Video";
 function App() {
   return (
     <Router>
@@ -24,6 +24,7 @@ function App() {
           <Route path="/personal-area" element={<PersonalArea />} />
           <Route path="/chat-ai" element={<Chat />} />
           <Route path="/download" element={<DownloadApp />} />
+          <Route path="/video" element={<Video />} />
         </Routes>
       </div>
 
