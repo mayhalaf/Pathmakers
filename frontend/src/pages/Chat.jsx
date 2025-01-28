@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from "react";
-
-
-import { 
-  ChevronRight, MapPin, Plane, Hotel, Compass, 
-  Car, CreditCard 
+import {
+  ChevronRight,
+  MapPin,
+  Plane,
+  Hotel,
+  Compass,
 } from "lucide-react";
 import "../components/chat.css";
-
-
-import attractions from "../../data/attractions.json";
-import cities from "../../data/cities.json";
-import flights from "../../data/flights.json";
-import hotels from "../../data/hotels.json";
 
 const TravelPlannerApp = () => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -20,14 +15,26 @@ const TravelPlannerApp = () => {
   const [loadedFlights, setLoadedFlights] = useState([]);
   const [loadedHotels, setLoadedHotels] = useState([]);
   const [loadedAttractions, setLoadedAttractions] = useState([]);
- 
+
   useEffect(() => {
-    // Load data from JSON files
-    setLoadedCities(cities);
-    setLoadedFlights(flights);
-    setLoadedHotels(hotels);
-    setLoadedAttractions(attractions);
+    // Fetch data from server endpoints
+    Promise.all([
+      fetch("http://localhost:4000/cities").then((res) => res.json()),
+      fetch("http://localhost:4000/flights").then((res) => res.json()),
+      fetch("http://localhost:4000/hotels").then((res) => res.json()),
+      fetch("http://localhost:4000/attractions").then((res) => res.json()),
+    ])
+      .then(([citiesData, flightsData, hotelsData, attractionsData]) => {
+        setLoadedCities(citiesData);
+        setLoadedFlights(flightsData);
+        setLoadedHotels(hotelsData);
+        setLoadedAttractions(attractionsData);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
   }, []);
+
   const steps = [
     {
       label: "Destination",
@@ -65,7 +72,8 @@ const TravelPlannerApp = () => {
         {
           prompt: "Select your hotel",
           options: loadedHotels.map(
-            (hotel) => `${hotel.name} - ${hotel.stars}⭐ - $${hotel.price}/night`
+            (hotel) =>
+              `${hotel.name} - ${hotel.stars}⭐ - $${hotel.price}/night`
           ),
         },
         { prompt: "Budget range per night?", type: "text" },
@@ -107,76 +115,79 @@ const TravelPlannerApp = () => {
       icon: Compass,
     },
   ];
- 
+
   const renderProgressBar = () => (
-<div className="progress-bar">
-<div
+    <div className="progress-bar">
+      <div
         className="progress-bar-fill"
         style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
-></div>
-</div>
+      ></div>
+    </div>
   );
- 
-    const renderStepContent = () => {
-        const step = steps[currentStep];
-        return (
-    <div className="step">
-    <div className="step-header">
-    <step.icon />
-    <h2>{step.label}</h2>
-    </div>
-    <div className="step-content">
-            {step.questions.map((q, index) => (
-    <div key={index}>
-    <label>{q.prompt}</label>
-                {q.type === "text" ? (
-    <input
-                    type="text"
-                    onChange={(e) =>
-                        setUserResponses({
-                        ...userResponses,
-                        [q.prompt]: e.target.value,
-                        })
-                    }
-                    />
-                ) : (
-    <select
-                    onChange={(e) =>
-                        setUserResponses({
-                        ...userResponses,
-                        [q.prompt]: e.target.value,
-                        })
-                    }
-    >
-                    {q.options.map((option, i) => (
-    <option key={i} value={option}>
-                        {option}
-    </option>
-                    ))}
-    </select>
-                )}
-    </div>
-            ))}
-    </div>
-    <button
-            onClick={() => setCurrentStep((prev) => prev + 1)}
-            disabled={currentStep === steps.length - 1}
-    >
-            Next <ChevronRight />
-    </button>
-    </div>
-        );
-    };
-    
+
+  const renderStepContent = () => {
+    const step = steps[currentStep];
     return (
-    <div className="container">
-    <header>
-    <h1>Travel Planner</h1>
-            {renderProgressBar()}
-    </header>
-        {renderStepContent()}
-    </div>
+      <div className="step">
+        <div className="step-header">
+          <step.icon />
+          <h2>{step.label}</h2>
+        </div>
+        <div className="step-content">
+          {step.questions.map((q, index) => (
+            <div key={index}>
+              <label>{q.prompt}</label>
+              {q.type === "text" || q.type === "date" ? (
+                <input
+                  type={q.type}
+                  onChange={(e) =>
+                    setUserResponses({
+                      ...userResponses,
+                      [q.prompt]: e.target.value,
+                    })
+                  }
+                />
+              ) : (
+                <select
+                  onChange={(e) =>
+                    setUserResponses({
+                      ...userResponses,
+                      [q.prompt]: e.target.value,
+                    })
+                  }
+                >
+                  <option value="" disabled>
+                    Select an option
+                  </option>
+                  {q.options.map((option, i) => (
+                    <option key={i} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+              )}
+            </div>
+          ))}
+        </div>
+        <button
+          onClick={() => setCurrentStep((prev) => prev + 1)}
+          disabled={currentStep === steps.length - 1}
+        >
+          Next <ChevronRight />
+        </button>
+      </div>
     );
-    };
-    
+  };
+
+  return (
+    <div className="container">
+      <header>
+        <h1>Travel Planner</h1>
+        {renderProgressBar()}
+      </header>
+      {renderStepContent()}
+    </div>
+  );
+};
+
 export default TravelPlannerApp;

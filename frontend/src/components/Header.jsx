@@ -9,13 +9,17 @@ const Header = () => {
       <div className="logo">
         <img src={logo} alt="Logo" />
       </div>
-      <nav>
+      <nav className="navbar">
         <Link to="/">Home</Link>
         <Link to="/about">About</Link>
         <Link to="/chat">Chat</Link>
         <Link to="/login">Login</Link>
+        <Link to="/register">Register</Link>
+        <Link to="/personal-area">Personal Area</Link>
+        <Link to="/video">Video</Link>
+        <Link to="/download">Download</Link>
+        <Link to="/signup">Sign Up</Link>
       </nav>
-      <button className="btn-primary">Sign Up</button>
     </header>
   );
 };

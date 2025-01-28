@@ -1,8 +1,18 @@
 import express from 'express';
 import { promises as fs } from 'fs';
+import cors from 'cors';
+
 
 const app = express();
-app.use(express.json());  // Middleware לפרסינג של בקשות JSON
+app.use(express.json());
+app.use(cors()); // Enable CORS for all routes
+
+// Your existing routes and logic...
+
+app.listen(4000, () => {
+    console.log('Server is running on http://localhost:4000');
+});
+
 
 // פונקציה לקרוא קובץ JSON
 const getFileData = async (filePath) => {
