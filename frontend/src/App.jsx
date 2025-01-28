@@ -24,7 +24,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/personal-area" element={<PersonalArea />} />
-          <Route path="/chat-ai" element={<Chat />} />
+          <Route path="/chat" element={<Chat />} />
           <Route path="/downloadApp" element={<DownloadApp />} />
           <Route path="/video" element={<Video />} />
           <Route path="/signup" element={<Signup />} />
