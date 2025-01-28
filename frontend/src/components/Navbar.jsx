@@ -7,6 +7,9 @@ export default function Navbar() {
             <ul>
                 <li><Link to="/">Home</Link></li>
                 <li><Link to="/about">About</Link></li>
+                <li><Link to="/login">login</Link></li>
+                <li><Link to="/register">register</Link></li>
+                <li><Link to="/chat-ai">register</Link></li>
                 <li><Link to="/personal-area">Personal Area</Link></li>
                 <li><Link to="/download">Download</Link></li>
             </ul>

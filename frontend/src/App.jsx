@@ -14,11 +14,6 @@ function App() {
   return (
     <Router>
       <Header />  {/* Header component */}
-<<<<<<< HEAD
-      { <Routes>
-        <Route path="/" element={<HomePage />} />
-      </Routes> }
-=======
       
       <div className="content">
         <Routes>
@@ -32,7 +27,6 @@ function App() {
         </Routes>
       </div>
 
->>>>>>> 6808e7af74fde3c43883f6fc49788d65cdf36a35
       <Footer />  {/* Footer component */}
     </Router>
   );
