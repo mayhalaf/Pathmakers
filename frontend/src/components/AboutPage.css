@@ -1,12 +1,3 @@
-/* General Styles */
-body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #ece9e6, #ffffff);
-    color: #333;
-    line-height: 1.6;
-}
 
 .about-container {
     max-width: 800px;

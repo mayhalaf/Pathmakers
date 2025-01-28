@@ -1,0 +1,84 @@
+
+.loginContainer {
+    background: white;
+    padding: 40px 30px;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
+    text-align: center;
+   
+}
+.loginTitle {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: #2575fc;
+    font-weight: 600;
+}
+
+.formGroup {
+    margin-bottom: 20px;
+    text-align: left;
+    
+}
+
+.formGroup label {
+    display: block;
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.formGroup input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #333;
+    box-sizing: border-box;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.formGroup input:focus {
+    border-color: #4facfe;
+    box-shadow: 0 0 5px rgba(79, 172, 254, 0.5);
+}
+
+.loginButton {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.loginButton:hover {
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.signupText {
+    margin-top: 15px;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.signupText a {
+    color: #2575fc;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.signupText a:hover {
+    text-decoration: underline;
+}
