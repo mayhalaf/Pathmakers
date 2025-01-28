@@ -2,9 +2,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh; /* Makes the container take the full height of the viewport */
-    margin: 0; /* Removes default margin */
-    background-color: #f5f5f5; /* Optional: Set a background color */
+    min-height: 100vh; /* Full viewport height */
+    margin: 0;
+    background-color: #f5f5f5;
 }
 
 .containerDow {
@@ -12,16 +12,14 @@
     border-radius: 16px;
     padding: 40px;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-    max-width: 500px;
-    width: 90%;
+  
+    width: 100%; /* Make sure it adjusts to its content */
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
     gap: 15px;
 }
-
-
 
 .logo {
     width: 100px;
@@ -81,4 +79,67 @@
 .buttonIcon {
     width: 20px;
     margin-right: 10px;
+}
+
+
+
+/* התאמות כלליות לאייפון ואייפד */
+@media only screen and (max-width: 768px) {
+    .containerDow {
+        padding: 20px; /* פחות רווח */
+        gap: 10px; /* הקטנת הרווחים */
+    }
+
+    .title {
+        font-size: 1.5rem; /* גודל טקסט קטן יותר */
+    }
+
+    .description {
+        font-size: 0.9rem; /* התאמה לטקסט */
+    }
+
+    .button {
+        width: 100%; /* רוחב מלא */
+        max-width: none; /* ביטול המקסימום */
+    }
+}
+
+/* התאמות למסכים קטנים במיוחד (אייפון SE וכו') */
+@media only screen and (max-width: 375px) {
+    .containerDow {
+        padding: 15px;
+    }
+
+    .title {
+        font-size: 1.3rem;
+    }
+
+    .description {
+        font-size: 0.8rem;
+    }
+
+    .button {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+    }
+}
+
+/* התאמות לטאבלטים */
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+    .containerDow {
+        padding: 30px;
+    }
+
+    .title {
+        font-size: 1.6rem;
+    }
+
+    .description {
+        font-size: 1rem;
+    }
+
+    .button {
+        font-size: 1rem;
+        padding: 12px 18px;
+    }
 }

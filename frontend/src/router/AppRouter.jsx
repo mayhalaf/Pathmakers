@@ -18,6 +18,6 @@ export const Router = createBrowserRouter([
   { path: "/register", element: <Register /> },
   { path: "/personal-area", element: <PersonalArea /> },
   { path: "/video", element: <Video /> },
-  { path: "/download", element: <DownloadApp /> },
+  { path: "/downloadApp", element: <DownloadApp /> },
   { path: "/signup", element: <Signup /> },
 ]);

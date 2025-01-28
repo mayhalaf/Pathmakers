@@ -1,106 +1,94 @@
+/* General Header Styles */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background: linear-gradient(90deg, #afdce7, #004e75);
+  color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 100;
+}
 
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 30px;
-    background: linear-gradient(90deg, #afdce7, #004e75);
-    color: white;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .logo img {
-    height: 60px; /* Image height */
-    width: auto;  /* Maintain proportions */
-    margin-right: 20px;
-    object-fit: cover;
-  }
-  
-  nav {
-    display: flex;
-    gap: 20px;
-  }
-  
-  nav a {
-    text-decoration: none;
-    color: white;
-    font-size: 1rem;
-    padding: 8px 15px;
-    border-radius: 20px;
-    transition: all 0.3s ease;
-  }
-  
-  nav a:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-  }
-  
-  .btn-primary {
-    background-color: #f8f9fa;
-    color: #004e75;
-    padding: 8px 15px;
-    border-radius: 20px;
-    font-weight: bold;
-    text-transform: uppercase;
-    transition: all 0.3s ease;
-    border: none;
-  }
-  
-  .btn-primary:hover {
-    background-color: white;
-    color: #004e75;
+.logo img {
+  height: 60px;
+  width: auto;
+}
+
+/* Navigation Menu */
+.navbar {
+  display: flex;
+  gap: 20px;
+}
+
+.navbar a {
+  text-decoration: none;
+  color: white;
+  font-size: 1rem;
+  padding: 8px 15px;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+.navbar a:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Hamburger Menu */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.hamburger .line {
+  width: 100%;
+  height: 3px;
+  background-color: white;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.hamburger.active .line:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger.active .line:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active .line:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .navbar {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: #004e75;
+    width: 100%;
+    text-align: center;
+    padding: 20px 0;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-  }
-  
-
-
-  
-/* Animation */
-@keyframes fadeIn {
-  from {
-      opacity: 0;
-      transform: translateY(20px);
-  }
-  to {
-      opacity: 1;
-      transform: translateY(0);
-  }
-}
-
-/* Responsive Design for iPhones */
-@media (max-width: 430px) {
-  .about-container {
-      margin: 15px 10px;
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   }
 
-  h1 {
-      font-size: 1.4rem;
+  .navbar.show {
+    display: flex;
   }
 
-  p {
-      font-size: 0.95rem;
-      line-height: 1.6;
-  }
-
-  body {
-      line-height: 1.4;
-  }
-}
-
-/* Extra Small Screens (e.g., iPhone SE) */
-@media (max-width: 360px) {
-  .about-container {
-      padding: 10px;
-  }
-
-  h1 {
-      font-size: 1.2rem;
-  }
-
-  p {
-      font-size: 0.9rem;
+  .hamburger {
+    display: flex;
   }
 }

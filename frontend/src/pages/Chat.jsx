@@ -5,6 +5,9 @@ import {
   Plane,
   Hotel,
   Compass,
+  Car,
+  CreditCard,
+  CheckCircle,
 } from "lucide-react";
 import "../components/chat.css";
 
@@ -15,6 +18,8 @@ const TravelPlannerApp = () => {
   const [loadedFlights, setLoadedFlights] = useState([]);
   const [loadedHotels, setLoadedHotels] = useState([]);
   const [loadedAttractions, setLoadedAttractions] = useState([]);
+  const [loadedTransportation, setLoadedTransportation] = useState([]);
+  const [loadedPaymentOptions, setLoadedPaymentOptions] = useState([]);
 
   useEffect(() => {
     // Fetch data from server endpoints
@@ -23,13 +28,26 @@ const TravelPlannerApp = () => {
       fetch("http://localhost:4000/flights").then((res) => res.json()),
       fetch("http://localhost:4000/hotels").then((res) => res.json()),
       fetch("http://localhost:4000/attractions").then((res) => res.json()),
+      fetch("http://localhost:4000/transportation").then((res) => res.json()),
+      fetch("http://localhost:4000/payment-options").then((res) => res.json()),
     ])
-      .then(([citiesData, flightsData, hotelsData, attractionsData]) => {
-        setLoadedCities(citiesData);
-        setLoadedFlights(flightsData);
-        setLoadedHotels(hotelsData);
-        setLoadedAttractions(attractionsData);
-      })
+      .then(
+        ([
+          citiesData,
+          flightsData,
+          hotelsData,
+          attractionsData,
+          transportationData,
+          paymentOptionsData,
+        ]) => {
+          setLoadedCities(citiesData);
+          setLoadedFlights(flightsData);
+          setLoadedHotels(hotelsData);
+          setLoadedAttractions(attractionsData);
+          setLoadedTransportation(transportationData);
+          setLoadedPaymentOptions(paymentOptionsData);
+        }
+      )
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
@@ -114,6 +132,45 @@ const TravelPlannerApp = () => {
       ],
       icon: Compass,
     },
+    {
+      label: "Transportation",
+      questions: [
+        {
+          prompt: "Select your mode of transportation",
+          options: loadedTransportation.map(
+            (transport) => `${transport.type} - $${transport.price}`
+          ),
+        },
+        { prompt: "Do you need airport transfer?", options: ["Yes", "No"] },
+      ],
+      icon: Car,
+    },
+    {
+      label: "Payment",
+      questions: [
+        {
+          prompt: "Select payment method",
+          options: loadedPaymentOptions.map(
+            (paymentOption) => paymentOption.method
+          ),
+        },
+        { prompt: "Do you have a promo code?", type: "text" },
+      ],
+      icon: CreditCard,
+    },
+    {
+      label: "Trip Summary",
+      questions: [
+        { prompt: "Departure city", type: "text", value: userResponses["What is your departure city?"] },
+        { prompt: "Destination city", type: "text", value: userResponses["What is your destination city?"] },
+        { prompt: "Flight", type: "text", value: userResponses["Select your flight"] },
+        { prompt: "Hotel", type: "text", value: userResponses["Select your hotel"] },
+        { prompt: "Attractions", type: "text", value: userResponses["Select attractions to visit"] },
+        { prompt: "Transportation", type: "text", value: userResponses["Select your mode of transportation"] },
+        { prompt: "Payment method", type: "text", value: userResponses["Select payment method"] },
+      ],
+      icon: CheckCircle,
+    },
   ];
 
   const renderProgressBar = () => (
@@ -127,6 +184,32 @@ const TravelPlannerApp = () => {
 
   const renderStepContent = () => {
     const step = steps[currentStep];
+
+    if (step.label === "Trip Summary") {
+      return (
+        <div className="step">
+          <div className="step-header">
+            <step.icon />
+            <h2>{step.label}</h2>
+          </div>
+          <div className="step-content">
+            {step.questions.map((q, index) => (
+              <div key={index}>
+                <label>{q.prompt}</label>
+                <p>{q.value}</p>
+              </div>
+            ))}
+          </div>
+          <button
+            onClick={() => setCurrentStep(0)} // Reset to start over
+            disabled={currentStep === steps.length - 1}
+          >
+            Start Over
+          </button>
+        </div>
+      );
+    }
+
     return (
       <div className="step">
         <div className="step-header">
