@@ -2,28 +2,27 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start; /* מבטיח שהאלמנטים מתחילים מלמעלה */
+    justify-content: flex-start; /* ממקם את התוכן בחלק העליון */
     text-align: center;
-}
-.title {
-    font-size: 1.8rem;
-    color: #2575fc;
-    margin: 0; /* מבטל ריווחים מיותרים */
-    padding-top: 20px; /* מוסיף רווח למעלה */
-    text-align: center; /* ממקם את הכותרת במרכז */
+    height: 100vh; /* מאפשר שימוש מלא בגובה המסך */
 }
 
+
 .description {
-    font-size: 1rem;
+    font-size: 10rem;
     color: #666;
-    margin-bottom: 30px;
-    line-height: 1.5;
+ 
+   text-align:center;
+    padding-bottom: 300px;
+    margin-left: 200px;
 }
 
 .buttons {
     display: flex;
     gap: 10px;
     justify-content: center;
+    padding-top: 300px;
+    margin-right: 200px;
 }
 
 .button {
@@ -31,6 +30,7 @@
     align-items: center;
     justify-content: center;
     padding: 12px 20px;
+   
     font-size: 1rem;
     font-weight: bold;
     color: white;
