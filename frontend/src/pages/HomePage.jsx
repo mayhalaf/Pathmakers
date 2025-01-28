@@ -1,6 +1,6 @@
 import React from 'react';
 import '../components/HomePage.css';
-import bgVideo from "../assets/8451-209292190_small.mp4";
+import bgVideo from "../assets/215421_small.mp4";
 
 export default function HomePage() {
   return (

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../components/Video.css';
+import ph from "../assets/Pathmakers-VEED.mp4"; // Importing video
 
 const VideoExplanation = () => {
     const navigate = useNavigate();
@@ -12,8 +13,15 @@ const VideoExplanation = () => {
     return (
         <div className="containerVideo">
             <div className="videoContainer">
-                <video className="video" controls>
-                    {/* <source src="your-video-file.mp4" type="video/mp4" /> */}
+                <video 
+                    className="video" 
+                    autoPlay  // ✅ Enables autoplay
+                 
+                    loop      // ✅ Loops the video
+                    playsInline // ✅ Ensures it works properly on mobile
+                    controls  // ✅ Still allows users to control playback
+                >
+                    <source src={ph} type="video/mp4" />
                     Your browser does not support the video tag.
                 </video>
             </div>
