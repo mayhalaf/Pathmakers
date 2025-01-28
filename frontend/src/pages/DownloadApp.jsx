@@ -10,7 +10,7 @@ const DownloadApp = () => {
     };
 
     return (
-        <div className="container">
+        <div className="containerDow">
          
             <h1 className="title">Download Our App</h1>
             

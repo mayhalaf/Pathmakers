@@ -1,6 +1,7 @@
 
 .loginContainer {
     background: white;
+    margin: 150px auto; /* Centers horizontally */
     padding: 40px 30px;
     border-radius: 16px;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
@@ -8,8 +9,8 @@
     max-width: 400px;
     box-sizing: border-box;
     text-align: center;
-   
 }
+
 .loginTitle {
     font-size: 1.8rem;
     margin-bottom: 20px;

@@ -10,7 +10,7 @@ const VideoExplanation = () => {
     };
 
     return (
-        <div className="container">
+        <div className="containerVideo">
             <div className="videoContainer">
                 <video className="video" controls>
                     {/* <source src="your-video-file.mp4" type="video/mp4" /> */}

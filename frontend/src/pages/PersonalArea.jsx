@@ -18,7 +18,7 @@ const PersonalArea = () => {
                 Welcome to Your Personal Area
             </header>
 
-            <div className="container">
+            <div className="containerPersonal">
                 <h2 className="heading">User Details</h2>
                 <div className="profileInfo">
                     <p><strong>Name:</strong> Mai Khalaf</p>

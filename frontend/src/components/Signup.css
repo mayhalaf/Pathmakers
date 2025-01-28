@@ -1,13 +1,16 @@
+
 .signupContainer {
-    background: #f7f7f7;
+    background: white;
+    margin: 150px auto; /* Centers horizontally */
     padding: 40px 30px;
-    border-radius: 12px;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
     width: 100%;
-    max-width: 450px;
+    max-width: 400px;
     box-sizing: border-box;
     text-align: center;
 }
+
 
 .signupTitle {
     font-size: 2rem;
