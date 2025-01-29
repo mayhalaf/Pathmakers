@@ -7,6 +7,7 @@ const Login = () => {
         email: '',
         password: ''
     });
+    const [error, setError] = useState('');
     
     const navigate = useNavigate();
 
@@ -20,14 +21,26 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError(''); // Clear previous errors
+
         try {
-            // Add your login logic here
-            console.log('Login attempt with:', formData);
-            // If login successful, navigate to desired page
-            // navigate('/dashboard');
+            const response = await fetch('http://localhost:4000/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                console.log('Login successful:', data.user);
+                navigate('/video'); // Redirect to Video page
+            } else {
+                setError('Invalid email or password.');
+            }
         } catch (error) {
             console.error('Login error:', error);
-            // Handle login error (show message, etc.)
+            setError('An error occurred. Please try again.');
         }
     };
 
@@ -39,7 +52,9 @@ const Login = () => {
         <div className="loginContainer">
             <form className="loginForm" onSubmit={handleSubmit}>
                 <h2 className="loginTitle">Welcome Back</h2>
-                
+
+                {error && <p className="errorText">{error}</p>} {/* Show errors */}
+
                 <div className="formGroup">
                     <label htmlFor="email">Email</label>
                     <input
@@ -69,7 +84,7 @@ const Login = () => {
                 </button>
 
                 <p className="signupText">
-                    Dont have an account?{' '}
+                    Don't have an account?{' '}
                     <a href="#" onClick={handleSignUp}>
                         Sign up
                     </a>

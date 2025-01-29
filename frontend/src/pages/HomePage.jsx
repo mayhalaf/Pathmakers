@@ -1,8 +1,11 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "../components/HomePage.css";
 import bgVideo from "../assets/81945-577442929_small.mp4"; // Ensure correct path
 
 export default function HomePage() {
+  const navigate = useNavigate();
+
   return (
     <div className="hero-container">
       {/* Background Video */}
@@ -16,8 +19,12 @@ export default function HomePage() {
           <h1 className="main-title">Welcome to Pathmakers</h1>
           <p className="description-text">Travel agency which you'll love.</p>
           <div className="action-buttons">
-            <button className="action-btn login-button">Log in</button>
-            <button className="action-btn signup-button">Sign up</button>
+            <button className="action-btn login-button" onClick={() => navigate("/login")}>
+              Log in
+            </button>
+            <button className="action-btn signup-button" onClick={() => navigate("/signup")}>
+              Sign up
+            </button>
           </div>
         </div>
       </div>

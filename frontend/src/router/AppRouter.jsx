@@ -4,7 +4,6 @@ import HomePage from "../pages/HomePage";
 import AboutPage from "../pages/AboutPage";
 import Chat from "../pages/Chat";
 import Login from "../pages/Login";
-import Register from "../pages/Register";
 import PersonalArea from "../pages/PersonalArea";
 import Video from "../pages/Video";
 import DownloadApp from "../pages/DownloadApp";
@@ -15,7 +14,6 @@ export const Router = createBrowserRouter([
   { path: "/about", element: <AboutPage /> },
   { path: "/chat", element: <Chat /> },
   { path: "/login", element: <Login /> },
-  { path: "/register", element: <Register /> },
   { path: "/personal-area", element: <PersonalArea /> },
   { path: "/video", element: <Video /> },
   { path: "/downloadApp", element: <DownloadApp /> },

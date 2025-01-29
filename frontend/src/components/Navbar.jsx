@@ -9,7 +9,6 @@ export default function Navbar() {
                 <li><Link to="/">Home</Link></li>
                 <li><Link to="/about">About</Link></li>
                 <li><Link to="/login">Login</Link></li>
-                <li><Link to="/register">Register</Link></li>
                 <li><Link to="/chat">Chat AI</Link></li>
                 <li><Link to="/personal-area">Personal Area</Link></li>
                 <li><Link to="/video">Video</Link></li>
