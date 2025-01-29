@@ -1,4 +1,27 @@
+/* 🌎 Global Styles */
+:root {
+    --primary-font: 'Poppins', sans-serif;
+    --text-color: #333;
+    --heading-color: #4a90e2; /* Main signup title color */
+    --label-color: #666;
+    --input-border: #ccc;
+    --input-focus: #4a90e2;
+    --button-text-color: white;
+    --button-bg: linear-gradient(135deg, #4a90e2, #55c9e0);
+    --button-hover-bg: linear-gradient(135deg, #357ab7, #3cb1c1);
+    --error-color: #f75c7e;
+}
 
+/* 🌟 General Styles */
+body {
+    font-family: var(--primary-font);
+    color: var(--text-color);
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+/* 📌 Signup Container */
 .signupContainer {
     background: white;
     margin: 40px auto; /* Centers horizontally */
@@ -11,14 +34,15 @@
     text-align: center;
 }
 
-
+/* 🎯 Signup Title */
 .signupTitle {
     font-size: 2rem;
     margin-bottom: 25px;
-    color: #4a90e2;
     font-weight: 700;
+    color: var(--heading-color);
 }
 
+/* 🔹 Form */
 .formGroup {
     margin-bottom: 25px;
     text-align: left;
@@ -27,34 +51,36 @@
 .formGroup label {
     display: block;
     font-size: 1rem;
-    color: #333;
+    color: var(--label-color);
     margin-bottom: 8px;
 }
 
 .formGroup input {
     width: 100%;
     padding: 12px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--input-border);
     border-radius: 10px;
     font-size: 1.1rem;
-    color: #333;
+    color: var(--text-color);
     box-sizing: border-box;
     outline: none;
     transition: all 0.3s ease;
+    background-color: white;
 }
 
 .formGroup input:focus {
-    border-color: #4a90e2;
+    border-color: var(--input-focus);
     box-shadow: 0 0 8px rgba(74, 144, 226, 0.5);
 }
 
+/* 🎨 Signup Button */
 .signupButton {
     width: 100%;
     padding: 14px;
     font-size: 1.1rem;
     font-weight: 600;
-    color: white;
-    background: linear-gradient(135deg, #4a90e2, #55c9e0);
+    color: var(--button-text-color);
+    background: var(--button-bg);
     border: none;
     border-radius: 10px;
     cursor: pointer;
@@ -63,19 +89,20 @@
 }
 
 .signupButton:hover {
-    background: linear-gradient(135deg, #357ab7, #3cb1c1);
+    background: var(--button-hover-bg);
     transform: translateY(-3px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
+/* 🔗 Login Text */
 .loginText {
     margin-top: 20px;
     font-size: 1rem;
-    color: #777;
+    color: var(--label-color);
 }
 
 .loginText a {
-    color: #4a90e2;
+    color: var(--heading-color);
     text-decoration: none;
     font-weight: 600;
 }
@@ -84,8 +111,9 @@
     text-decoration: underline;
 }
 
+/* ❌ Error Messages */
 .error {
-    color: #f75c7e;
+    color: var(--error-color);
     font-size: 0.9rem;
     margin-top: 8px;
 }
