@@ -1,117 +1,147 @@
-/* Ensuring entire page fills the viewport */
-.home-container {
+/* Ensuring full viewport height */
+.page-container {
   display: flex;
   flex-direction: row;
-  min-height: calc(100vh - 100px); /* Adjust dynamically */
+  min-height: 100vh;
   width: 100%;
   overflow: hidden;
+  position: relative;
 }
 
-/* Left Panel */
-.left-panel {
+/* Left Panel - Transparent Overlay */
+.info-section {
   flex: 1;
-  background: linear-gradient(90deg, #afdce7, #004e75);
+  background: rgba(35, 35, 35, 0.517); /* Semi-transparent black */
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  box-sizing: border-box;
-  position: relative;
-  z-index: 2; /* Ensure content stays above the video */
-}
-
-.content-overlay {
-  text-align: center;
-  position: relative;
-  z-index: 2;
-}
-
-/* Right Panel with video */
-.right-panel {
-  flex: 1;
-  background-color: #f8f9fa;
-  position: relative;
-  overflow: hidden; /* Ensures no overflow from video */
-}
-
-/* Video Styling to cover the right panel completely */
-.bg-video {
-  position: absolute;
-  top: 0;
-  left: -10%; /* Moves video slightly to hide from left panel */
-  width: 120%;  /* Expands video beyond container to cover split */
-  height: 100%;
-  object-fit: cover;
-  z-index: 1; /* Ensures video stays behind the content */
-}
-
-/* Content Wrapper */
-.content-wrapper {
-  position: relative;
-  z-index: 2;
   text-align: center;
   padding: 40px;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 2;
+}
+.info-section, .video-section {
+  height: 100vh; /* Ensures both sections are equal height */
 }
 
-/* Buttons */
-.button-group {
+
+
+/* Right Panel - Background Video */
+.video-section {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Background Video - Covers Entire Section */
+.fullscreen-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1; /* Ensure video stays behind everything */
+}
+
+/* Transparent Overlay on Video */
+.video-overlay-dark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(151, 149, 149, 0.3); /* Lighter transparent overlay */
+  z-index: 2;
+}
+
+
+/* Content in the right panel */
+.content-box {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+ 
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+/* Headings */
+.main-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: rgb(224, 224, 224);
+}
+
+/* Paragraph Text */
+.description-text {
+  font-size: 1.2rem;
+  max-width: 80%;
+  color: rgb(195, 192, 192);
+}
+
+/* Buttons Styling */
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
   margin-top: 20px;
 }
 
-.btn {
+.action-btn {
   padding: 12px 24px;
   border: none;
   border-radius: 25px;
   cursor: pointer;
-  margin: 0 10px;
   font-size: 16px;
   font-weight: bold;
   transition: all 0.3s ease-in-out;
 }
 
-.login-btn {
+.login-button {
   background-color: #004e75;
   color: white;
 }
 
-.login-btn:hover {
-  background-color: #003955;
+.login-button:hover {
+  background-color: #13394c;
 }
 
-.signup-btn {
-  background-color: #ff6b6b;
+.signup-button {
+  background-color: #e05454;
   color: white;
 }
 
-.signup-btn:hover {
-  background-color: #d44f4f;
+.signup-button:hover {
+  background-color: #a51919;
 }
 
-
-
-/* Responsive Design */
+/* 📱 Responsive Design */
 @media (max-width: 768px) {
-  .home-container {
-    flex-direction: column;
-    height: auto;
+  .page-container {
+      flex-direction: column;
   }
 
-  .left-panel, .right-panel {
-    flex: 1 1 auto;
-    width: 100%;
-    padding: 20px;
-    text-align: center;
+  .info-section, .video-section {
+      flex: 1 1 auto;
+      width: 100%;
+      text-align: center;
+      padding: 30px;
   }
 
-  .bg-video {
-    left: 0;
-    width: 100%;
-    height: auto;
+  .action-buttons {
+      flex-direction: column;
   }
 
-  .btn {
-    width: 100%;
-    margin-bottom: 10px;
+  .action-btn {
+      width: 100%;
+      margin-bottom: 10px;
   }
 }

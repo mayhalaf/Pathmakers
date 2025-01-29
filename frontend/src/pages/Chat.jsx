@@ -263,7 +263,7 @@ const TravelPlannerApp = () => {
   };
 
   return (
-    <div className="container">
+    <div className="containerCh">
       <header>
         <h1>Travel Planner</h1>
         {renderProgressBar()}

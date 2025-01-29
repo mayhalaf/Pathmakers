@@ -1,50 +1,41 @@
+/* Center the entire component */
 .outerContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh; /* Full viewport height */
-    margin: 0;
-    background-color: #f5f5f5;
-}
-
-.containerDow {
     background: white;
+    margin: 100px auto; /* Centers horizontally */
+    padding: 40px 30px;
     border-radius: 16px;
-    padding: 40px;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-  
-    width: 100%; /* Make sure it adjusts to its content */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
     text-align: center;
-    gap: 15px;
 }
 
-.logo {
-    width: 100px;
-    margin-bottom: 20px;
-}
 
+
+/* Title styling */
 .title {
     font-size: 1.8rem;
     color: #2575fc;
 }
 
+/* Description text */
 .description {
     font-size: 1rem;
     color: #666;
     line-height: 1.5;
 }
 
+/* Buttons container */
 .buttons {
     display: flex;
-    flex-direction: column;  /* Makes buttons appear in a column */
+    flex-direction: column;
     gap: 10px;
     width: 100%;
-    align-items: center; /* Centers buttons horizontally */
+    align-items: center;
 }
 
+/* Buttons */
 .button {
     display: flex;
     align-items: center;
@@ -59,7 +50,7 @@
     text-decoration: none;
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    width: 80%; /* Adjust button width */
+    width: 80%;
     max-width: 250px;
 }
 
@@ -68,43 +59,44 @@
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
+/* iOS button */
 .ios {
     background: linear-gradient(135deg, #4facfe, #00f2fe);
 }
 
+/* Android button */
 .android {
     background: linear-gradient(135deg, #34e89e, #0f3443);
 }
 
+/* Button icons */
 .buttonIcon {
     width: 20px;
+    height: 20px;
     margin-right: 10px;
 }
 
-
-
-/* התאמות כלליות לאייפון ואייפד */
+/* Responsive Design */
 @media only screen and (max-width: 768px) {
     .containerDow {
-        padding: 20px; /* פחות רווח */
-        gap: 10px; /* הקטנת הרווחים */
+        padding: 20px;
+        gap: 10px;
     }
 
     .title {
-        font-size: 1.5rem; /* גודל טקסט קטן יותר */
+        font-size: 1.5rem;
     }
 
     .description {
-        font-size: 0.9rem; /* התאמה לטקסט */
+        font-size: 0.9rem;
     }
 
     .button {
-        width: 100%; /* רוחב מלא */
-        max-width: none; /* ביטול המקסימום */
+        width: 100%;
+        max-width: none;
     }
 }
 
-/* התאמות למסכים קטנים במיוחד (אייפון SE וכו') */
 @media only screen and (max-width: 375px) {
     .containerDow {
         padding: 15px;
@@ -121,25 +113,5 @@
     .button {
         padding: 10px 15px;
         font-size: 0.9rem;
-    }
-}
-
-/* התאמות לטאבלטים */
-@media only screen and (min-width: 769px) and (max-width: 1024px) {
-    .containerDow {
-        padding: 30px;
-    }
-
-    .title {
-        font-size: 1.6rem;
-    }
-
-    .description {
-        font-size: 1rem;
-    }
-
-    .button {
-        font-size: 1rem;
-        padding: 12px 18px;
     }
 }

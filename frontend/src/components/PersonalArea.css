@@ -10,10 +10,8 @@
 }
 
 .heading {
-    color: #6200ea;
     text-align: center;
-    font-size: 1.8em;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .profileInfo {
@@ -31,7 +29,7 @@
 .button {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #6200ea;
+    background-color: #4a0f9c;
     color: white;
     border: none;
     border-radius: 20px;
@@ -44,7 +42,7 @@
 }
 
 .button:hover {
-    background-color: #3700b3;
+    background-color: #46278f;
     transform: scale(1.05);
 }
 
