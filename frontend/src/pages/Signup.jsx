@@ -99,7 +99,7 @@ const Signup = () => {
                     localStorage.setItem("user", JSON.stringify(loginData.user));
     
                     // Redirect to /video after signup
-                    navigate("/video");
+                    navigate("/main");
                 } else {
                     setErrors({ submit: loginData.error || "Login failed after signup. Try logging in manually." });
                 }
