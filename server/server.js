@@ -116,10 +116,22 @@ app.post('/login', async (req, res) => {
     const users = await readJsonFile(FILE_PATHS.users);
     
     const user = users.find(u => u.username === username && u.password === password);
-    user 
-        ? res.json({ message: `Welcome ${user.username}!` }) 
-        : res.status(401).json({ error: 'Invalid authentication' });
+    
+    if (user) {
+        res.json({
+            message: `Welcome ${user.username}!`,
+            user: {
+                id: user.id,
+                username: user.username,
+                email: user.email,
+                profileImage: user.profileImage || null // Include profile image if available
+            }
+        });
+    } else {
+        res.status(401).json({ error: 'Invalid authentication' });
+    }
 });
+
 
 // **City Routes**
 app.get('/cities', async (req, res) => {
