@@ -41,7 +41,7 @@ const Login = () => {
                 localStorage.setItem("user", JSON.stringify(data.user));
     
                 // Redirect to /video after login
-                navigate("/video");
+                navigate("/main");
             } else {
                 setError("Invalid username or password.");
             }
