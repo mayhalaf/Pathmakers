@@ -68,7 +68,7 @@
   }
   
   .main-btn {
-    padding: 16px 30px;
+    padding: 20px 30px;
     font-size: 1.2rem;
     font-weight: bold;
     width: 80%;
@@ -81,12 +81,12 @@
   }
 
   .main-Chat{
-    background-color: #e05454;
+    background-color: #bf281c;
     color: white;
   }
   
   .main-Chat:hover {
-    background-color: #a51919;
+    background-color: #a14545;
   }
   
   /* ===== Responsive Design ===== */

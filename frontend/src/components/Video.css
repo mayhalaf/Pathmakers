@@ -54,7 +54,7 @@
 }
 
 .nextButton:hover {
-    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    background: linear-gradient(135deg, #914f4a, #6c3733);
     transform: translateY(-2px);
     margin-left: 120px;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
