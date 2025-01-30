@@ -10,7 +10,7 @@ import Chat from "./pages/Chat";
 import DownloadApp from "./pages/DownloadApp";
 import Video from "./pages/Video";
 import Signup from "./pages/Signup";
-
+import Main from "./pages/Main";
 function App() {
   return (
     <Router>
@@ -26,6 +26,7 @@ function App() {
           <Route path="/downloadApp" element={<DownloadApp />} />
           <Route path="/video" element={<Video />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/main" element={<Main />} />
         </Routes>
       </div>
 
