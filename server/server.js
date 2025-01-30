@@ -85,19 +85,27 @@ app.post('/users', async (req, res) => {
 
 
 
-app.put('/users/:id', async (req, res) => {
-    const users = await readJsonFile(FILE_PATHS.users);
-    const { id } = req.params;
-    const updatedData = req.body;
+app.get("/user", async (req, res) => {
+    try {
+        const users = await readJsonFile(FILE_PATHS.users);
 
-    const userIndex = users.findIndex(user => user.id === parseInt(id));
-    if (userIndex === -1) return res.status(404).json({ error: 'User not found' });
+        // Simulating an active logged-in user (fetch first user for now)
+        const user = users.length > 0 ? users[0] : null;
 
-    users[userIndex] = { ...users[userIndex], ...updatedData };
-    await writeJsonFile(FILE_PATHS.users, users);
-
-    res.json({ message: 'User updated successfully', user: users[userIndex] });
+        if (user) {
+            res.json({
+                username: user.username,
+                email: user.email,
+                profileImage: user.profileImage || null,
+            });
+        } else {
+            res.status(404).json({ error: "User not found" });
+        }
+    } catch (error) {
+        res.status(500).json({ error: "Error retrieving user data" });
+    }
 });
+
 
 app.delete('/users/:id', async (req, res) => {
     const users = await readJsonFile(FILE_PATHS.users);
@@ -224,4 +232,19 @@ app.get('/all-cities', async (req, res) => {
 // **Start the Server**
 app.listen(4000, () => {
     console.log('Server is running on http://localhost:4000');
+});
+app.get("/payment-options", async (req, res) => {
+    res.json([
+        { id: 1, type: "Credit Card", accepted: true },
+        { id: 2, type: "PayPal", accepted: true },
+        { id: 3, type: "Bitcoin", accepted: false }
+    ]);
+});
+
+app.get("/transportation", async (req, res) => {
+    res.json([
+        { id: 1, method: "Car Rental", available: true },
+        { id: 2, method: "Train", available: true },
+        { id: 3, method: "Bike Rental", available: false }
+    ]);
 });

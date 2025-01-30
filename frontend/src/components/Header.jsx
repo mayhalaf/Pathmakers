@@ -23,10 +23,11 @@ const Header = () => {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
-    setUser(null);
-    navigate("/login");
-  };
+    localStorage.removeItem("user"); // Clear session storage
+    setUser(null); // Reset user state
+    navigate("/login"); // Redirect to login page
+};
+
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
