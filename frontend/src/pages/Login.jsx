@@ -23,29 +23,34 @@ const Login = () => {
     // Handle form submit
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError(''); // Clear previous errors
-
+        setError("");
+    
         try {
-            const response = await fetch('http://127.0.0.1:4000/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+            const response = await fetch("http://localhost:4000/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData)
             });
-
+    
             const data = await response.json();
-
-            if (response.ok) {
-                console.log('Login successful:', data.message);
-                navigate('/video'); // Redirect to dashboard or another page
+    
+            if (response.ok && data.user) {
+                console.log("Login successful:", data);
+    
+                // Store user data in localStorage only if it's valid
+                localStorage.setItem("user", JSON.stringify(data.user));
+    
+                // Redirect to /video after login
+                navigate("/video");
             } else {
-                setError(data.error || 'Invalid username or password.');
+                setError("Invalid username or password.");
             }
         } catch (error) {
-            console.error('Login error:', error);
-            setError('An error occurred. Please try again.');
+            console.error("Login error:", error);
+            setError("An error occurred. Please try again.");
         }
     };
-
+    
     const handleSignUp = () => {
         navigate('/signup');
     };
