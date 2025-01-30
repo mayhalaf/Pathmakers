@@ -14,10 +14,10 @@ export const Router = createBrowserRouter([
   { path: "/", element: <HomePage /> },
   { path: "/about", element: <AboutPage /> },
   { path: "/chat", element: <Chat /> },
+  { path: "/main", element: <Main /> },
   { path: "/login", element: <Login /> },
   { path: "/personal-area", element: <PersonalArea /> },
   { path: "/video", element: <Video /> },
   { path: "/downloadApp", element: <DownloadApp /> },
   { path: "/signup", element: <Signup /> },
-  { path: "/Main", element: <Main /> }
 ]);

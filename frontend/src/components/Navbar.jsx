@@ -12,6 +12,7 @@ export default function Navbar() {
                 <li><Link to="/chat">Chat AI</Link></li>
                 <li><Link to="/personal-area">Personal Area</Link></li>
                 <li><Link to="/video">Video</Link></li>
+                     <Link to="/main">Main</Link>
                 <li><Link to="/DownloadApp">Download App</Link></li>
                 <li><Link to="/signup">Signup</Link></li>
             </ul>

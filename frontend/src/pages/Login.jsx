@@ -29,19 +29,14 @@ const Login = () => {
             const response = await fetch("http://localhost:4000/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(formData),
             });
     
             const data = await response.json();
     
-            if (response.ok && data.user) {
+            if (response.ok) {
                 console.log("Login successful:", data);
-    
-                // Store user data in localStorage only if it's valid
-                localStorage.setItem("user", JSON.stringify(data.user));
-    
-                // Redirect to /video after login
-                navigate("/main");
+                window.location.href = "/video"; // Refresh and navigate
             } else {
                 setError("Invalid username or password.");
             }
@@ -50,6 +45,8 @@ const Login = () => {
             setError("An error occurred. Please try again.");
         }
     };
+    
+    
     
     const handleSignUp = () => {
         navigate('/signup');
