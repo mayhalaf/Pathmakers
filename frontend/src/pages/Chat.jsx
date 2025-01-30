@@ -61,8 +61,9 @@ const TravelPlannerApp = () => {
         {
           prompt: "What is your destination city?",
           options: Array.isArray(loadedCities) && loadedCities.length > 0
-            ? loadedCities.map((city) => city.name)
-            : ["Loading..."],
+          ? loadedCities // ✅ Just use the array directly
+          : ["Loading..."],
+        
         },
       ],
       icon: MapPin,
@@ -75,11 +76,10 @@ const TravelPlannerApp = () => {
         {
           prompt: "Select your flight",
           options: Array.isArray(loadedFlights) && loadedFlights.length > 0
-            ? loadedFlights.map(
-                (flight) =>
-                  `${flight.airline} - $${flight.price} (${flight.departureTime})`
-              )
-            : ["Loading..."],
+          ? (loadedFlights.find(flight => flight.city === userResponses["What is your destination city?"])?.airlines.map(
+              airline => `${airline.name} - $${airline.price} (${airline.duration})`
+            ) || [])
+          : ["Loading..."],
         },
         {
           prompt: "Class preference",
@@ -94,11 +94,11 @@ const TravelPlannerApp = () => {
         {
           prompt: "Select your hotel",
           options: Array.isArray(loadedHotels) && loadedHotels.length > 0
-            ? loadedHotels.map(
-                (hotel) =>
-                  `${hotel.name} - ${hotel.stars}⭐ - $${hotel.price}/night`
-              )
-            : ["Loading..."],
+          ? (loadedHotels.find(hotel => hotel.city === userResponses["What is your destination city?"])?.hotels.map(
+              hotel => `${hotel.name} - $${hotel.price}/night`
+            ) || [])
+          : ["Loading..."],
+        
         },
         { prompt: "Budget range per night?", type: "text" },
         {
@@ -118,11 +118,9 @@ const TravelPlannerApp = () => {
         {
           prompt: "Select attractions to visit",
           options: Array.isArray(loadedAttractions) && loadedAttractions.length > 0
-            ? loadedAttractions.map(
-                (attraction) =>
-                  `${attraction.name} - $${attraction.price} - ${attraction.type}`
-              )
-            : ["Loading..."],
+          ? (loadedAttractions.find(attraction => attraction.city === userResponses["What is your destination city?"])?.attractions || [])
+          : ["Loading..."],
+        
         },
         { prompt: "Budget for daily activities?", type: "text" },
         {
@@ -146,10 +144,13 @@ const TravelPlannerApp = () => {
         {
           prompt: "Select your mode of transportation",
           options: Array.isArray(loadedTransportation) && loadedTransportation.length > 0
-            ? loadedTransportation.map(
-                (transport) => `${transport.type} - $${transport.price}`
-              )
-            : ["Loading..."],
+          ? loadedTransportation.map((transport) => 
+              transport.type && transport.price !== undefined
+                ? `${transport.type} - $${transport.price}`
+                : "Invalid transportation data"
+            )
+          : ["Loading..."],
+        
         },
         { prompt: "Do you need airport transfer?", options: ["Yes", "No"] },
       ],
@@ -161,10 +162,11 @@ const TravelPlannerApp = () => {
         {
           prompt: "Select payment method",
           options: Array.isArray(loadedPaymentOptions) && loadedPaymentOptions.length > 0
-            ? loadedPaymentOptions.map(
-                (paymentOption) => paymentOption.method
-              )
-            : ["Loading..."],
+          ? loadedPaymentOptions.map((paymentOption) => 
+              paymentOption.method ? paymentOption.method : "Invalid payment option"
+            )
+          : ["Loading..."],
+        
         },
         { prompt: "Do you have a promo code?", type: "text" },
       ],
