@@ -8,6 +8,7 @@ import PersonalArea from "../pages/PersonalArea";
 import Video from "../pages/Video";
 import DownloadApp from "../pages/DownloadApp";
 import Signup from "../pages/Signup";
+import Main from "../pages/Main";
 
 export const Router = createBrowserRouter([
   { path: "/", element: <HomePage /> },
@@ -18,4 +19,5 @@ export const Router = createBrowserRouter([
   { path: "/video", element: <Video /> },
   { path: "/downloadApp", element: <DownloadApp /> },
   { path: "/signup", element: <Signup /> },
+  { path: "/Main", element: <Main /> }
 ]);
