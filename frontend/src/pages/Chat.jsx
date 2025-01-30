@@ -60,7 +60,9 @@ const TravelPlannerApp = () => {
         { prompt: "What is your departure city?", type: "text" },
         {
           prompt: "What is your destination city?",
-          options: loadedCities.map((city) => city.name),
+          options: Array.isArray(loadedCities) && loadedCities.length > 0
+            ? loadedCities.map((city) => city.name)
+            : ["Loading..."],
         },
       ],
       icon: MapPin,
@@ -72,10 +74,12 @@ const TravelPlannerApp = () => {
         { prompt: "Travel dates (return)?", type: "date" },
         {
           prompt: "Select your flight",
-          options: loadedFlights.map(
-            (flight) =>
-              `${flight.airline} - $${flight.price} (${flight.departureTime})`
-          ),
+          options: Array.isArray(loadedFlights) && loadedFlights.length > 0
+            ? loadedFlights.map(
+                (flight) =>
+                  `${flight.airline} - $${flight.price} (${flight.departureTime})`
+              )
+            : ["Loading..."],
         },
         {
           prompt: "Class preference",
@@ -89,10 +93,12 @@ const TravelPlannerApp = () => {
       questions: [
         {
           prompt: "Select your hotel",
-          options: loadedHotels.map(
-            (hotel) =>
-              `${hotel.name} - ${hotel.stars}⭐ - $${hotel.price}/night`
-          ),
+          options: Array.isArray(loadedHotels) && loadedHotels.length > 0
+            ? loadedHotels.map(
+                (hotel) =>
+                  `${hotel.name} - ${hotel.stars}⭐ - $${hotel.price}/night`
+              )
+            : ["Loading..."],
         },
         { prompt: "Budget range per night?", type: "text" },
         {
@@ -111,10 +117,12 @@ const TravelPlannerApp = () => {
       questions: [
         {
           prompt: "Select attractions to visit",
-          options: loadedAttractions.map(
-            (attraction) =>
-              `${attraction.name} - $${attraction.price} - ${attraction.type}`
-          ),
+          options: Array.isArray(loadedAttractions) && loadedAttractions.length > 0
+            ? loadedAttractions.map(
+                (attraction) =>
+                  `${attraction.name} - $${attraction.price} - ${attraction.type}`
+              )
+            : ["Loading..."],
         },
         { prompt: "Budget for daily activities?", type: "text" },
         {
@@ -137,9 +145,11 @@ const TravelPlannerApp = () => {
       questions: [
         {
           prompt: "Select your mode of transportation",
-          options: loadedTransportation.map(
-            (transport) => `${transport.type} - $${transport.price}`
-          ),
+          options: Array.isArray(loadedTransportation) && loadedTransportation.length > 0
+            ? loadedTransportation.map(
+                (transport) => `${transport.type} - $${transport.price}`
+              )
+            : ["Loading..."],
         },
         { prompt: "Do you need airport transfer?", options: ["Yes", "No"] },
       ],
@@ -150,9 +160,11 @@ const TravelPlannerApp = () => {
       questions: [
         {
           prompt: "Select payment method",
-          options: loadedPaymentOptions.map(
-            (paymentOption) => paymentOption.method
-          ),
+          options: Array.isArray(loadedPaymentOptions) && loadedPaymentOptions.length > 0
+            ? loadedPaymentOptions.map(
+                (paymentOption) => paymentOption.method
+              )
+            : ["Loading..."],
         },
         { prompt: "Do you have a promo code?", type: "text" },
       ],
@@ -196,7 +208,7 @@ const TravelPlannerApp = () => {
             {step.questions.map((q, index) => (
               <div key={index}>
                 <label>{q.prompt}</label>
-                <p>{q.value}</p>
+                <p>{q.value || userResponses[q.prompt]}</p>
               </div>
             ))}
           </div>
@@ -223,6 +235,7 @@ const TravelPlannerApp = () => {
               {q.type === "text" || q.type === "date" ? (
                 <input
                   type={q.type}
+                  value={userResponses[q.prompt] || ""}
                   onChange={(e) =>
                     setUserResponses({
                       ...userResponses,
@@ -232,6 +245,7 @@ const TravelPlannerApp = () => {
                 />
               ) : (
                 <select
+                  value={userResponses[q.prompt] || ""}
                   onChange={(e) =>
                     setUserResponses({
                       ...userResponses,
@@ -254,7 +268,7 @@ const TravelPlannerApp = () => {
         </div>
         <button
           onClick={() => setCurrentStep((prev) => prev + 1)}
-          disabled={currentStep === steps.length - 1}
+          disabled={currentStep === steps.length - 1 || !userResponses[steps[currentStep].questions[0].prompt]}
         >
           Next <ChevronRight />
         </button>
