@@ -38,20 +38,52 @@ app.get('/users', async (req, res) => {
     const users = await readJsonFile(FILE_PATHS.users);
     res.json(users);
 });
+app.get('/user', async (req, res) => {
+    try {
+        const users = await readJsonFile(FILE_PATHS.users);
+
+        // Simulating a logged-in user (You may replace this logic with authentication)
+        const user = users.length > 0 ? users[0] : null;
+
+        if (user) {
+            res.json({
+                username: user.username,
+                profileImage: user.profileImage || null, // Add a profile image if available
+            });
+        } else {
+            res.status(404).json({ error: 'User not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Error retrieving user data' });
+    }
+});
+
 
 app.post('/users', async (req, res) => {
-    const users = await readJsonFile(FILE_PATHS.users);
-    const newUser = req.body;
+    try {
+        const users = await readJsonFile(FILE_PATHS.users);
+        const { id, username, email, password } = req.body;
 
-    if (users.some(user => user.id === newUser.id)) {
-        return res.status(400).json({ error: 'User with this ID already exists' });
+        // Check if username or email already exists
+        if (users.some(user => user.username === username || user.email === email)) {
+            return res.status(400).json({ error: 'Username or email already taken' });
+        }
+
+        // Add the new user
+        const newUser = { id, username, email, password };
+        users.push(newUser);
+        await writeJsonFile(FILE_PATHS.users, users);
+
+        res.status(201).json({ 
+            message: 'User registered successfully', 
+            user: newUser 
+        });
+    } catch (error) {
+        res.status(500).json({ error: 'Error registering user' });
     }
-
-    users.push(newUser);
-    await writeJsonFile(FILE_PATHS.users, users);
-    
-    res.status(201).json({ message: 'User added successfully', user: newUser });
 });
+
+
 
 app.put('/users/:id', async (req, res) => {
     const users = await readJsonFile(FILE_PATHS.users);

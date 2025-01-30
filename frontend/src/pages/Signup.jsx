@@ -4,12 +4,12 @@ import '../components/Signup.css';
 
 const Signup = () => {
     const [formData, setFormData] = useState({
-        name: '',
+        username: '',
         email: '',
         password: '',
         confirmPassword: ''
     });
-    
+
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
 
@@ -20,7 +20,6 @@ const Signup = () => {
             [id]: value
         }));
         
-        // Clear errors when user types
         if (errors[id]) {
             setErrors(prev => ({
                 ...prev,
@@ -32,8 +31,8 @@ const Signup = () => {
     const validateForm = () => {
         const newErrors = {};
         
-        if (!formData.name.trim()) {
-            newErrors.name = 'Name is required';
+        if (!formData.username.trim()) {
+            newErrors.username = 'Username is required';
         }
         
         if (!formData.email.trim()) {
@@ -65,18 +64,52 @@ const Signup = () => {
         }
 
         try {
-            // Add your signup logic here
-            console.log('Signup attempt with:', formData);
-            // If signup successful, navigate to desired page
-            // navigate('/dashboard');
-        } catch (error) {
-            console.error('Signup error:', error);
-            setErrors({ submit: 'Failed to create account. Please try again.' });
-        }
-    };
+            const signupResponse = await fetch('http://localhost:4000/users', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id: Date.now(), // Generate a unique ID
+                    username: formData.username,
+                    email: formData.email,
+                    password: formData.password
+                })
+            });
 
-    const handleLogin = () => {
-        navigate('/login');
+            const signupData = await signupResponse.json();
+
+            if (signupResponse.ok) {
+                console.log('Signup successful:', signupData);
+
+                // Automatically log in the user
+                const loginResponse = await fetch('http://localhost:4000/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: formData.username,
+                        password: formData.password
+                    })
+                });
+
+                const loginData = await loginResponse.json();
+
+                if (loginResponse.ok) {
+                    console.log('Login successful:', loginData);
+
+                    // Store user session (optional)
+                    localStorage.setItem('user', JSON.stringify(loginData));
+
+                    // Redirect to the dashboard or home page
+                    navigate('/video');
+                } else {
+                    setErrors({ submit: loginData.error || 'Login failed after signup. Please try logging in manually.' });
+                }
+            } else {
+                setErrors({ submit: signupData.error || 'Signup failed. Try again.' });
+            }
+        } catch (error) {
+            console.error('Signup/Login error:', error);
+            setErrors({ submit: 'An error occurred. Please try again.' });
+        }
     };
 
     return (
@@ -85,16 +118,16 @@ const Signup = () => {
                 <h2 className="signupTitle">Create an Account</h2>
                 
                 <div className="formGroup">
-                    <label htmlFor="name">Full Name</label>
+                    <label htmlFor="username">Username</label>
                     <input
                         type="text"
-                        id="name"
-                        placeholder="Enter your full name"
-                        value={formData.name}
+                        id="username"
+                        placeholder="Enter your username"
+                        value={formData.username}
                         onChange={handleChange}
                         required
                     />
-                    {errors.name && <div className="error">{errors.name}</div>}
+                    {errors.username && <div className="error">{errors.username}</div>}
                 </div>
 
                 <div className="formGroup">
@@ -143,13 +176,6 @@ const Signup = () => {
                 <button type="submit" className="signupButton">
                     Sign Up
                 </button>
-
-                <p className="loginText">
-                    Already have an account?{' '}
-                    <a href="#" onClick={handleLogin}>
-                        Log in
-                    </a>
-                </p>
             </form>
         </div>
     );
