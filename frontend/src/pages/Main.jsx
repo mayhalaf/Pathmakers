@@ -1,6 +1,14 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import '../components/main.css';
+
 const Main = () => {
+  const navigate = useNavigate(); // Initialize navigate function
+
+  const handleChatRedirect = () => {
+    navigate('/chat'); // Redirect to /chat when the button is clicked
+  };
+
   return (
     <div className="main-container">
       {/* Placeholder for video */}
@@ -16,8 +24,8 @@ const Main = () => {
           <p className="main-description">Travel agency which you'll love. -Let us turn your dream into the perfect trip – everything you need in one place!</p>
           
           <div className="main-buttons">         
-            <button className="main-Chat">
-            Chat with the chat
+            <button className="main-Chat" onClick={handleChatRedirect}>
+              Chat with the chat
             </button>
           </div>
         </div>
