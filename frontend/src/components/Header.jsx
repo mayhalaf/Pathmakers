@@ -10,14 +10,14 @@ const Header = () => {
   const [user, setUser] = useState(null); // Stores user data
 
   useEffect(() => {
-    // Fetch user data from backend
-    fetch("http://localhost:4000/user") // Update the API URL
+    fetch("http://127.0.0.1:4000/user") // Use 127.0.0.1 instead of localhost
       .then((res) => res.json())
       .then((data) => {
         setUser(data); // Set user data
       })
       .catch((error) => console.error("Error fetching user:", error));
-  }, []);
+}, []);
+
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);

@@ -16,5 +16,23 @@
     "username": "newuser",
     "password": "securepassword",
     "email": "newuser@example.com"
+  },
+  {
+    "id": 1738234269312,
+    "username": "eden",
+    "email": "edenk@mail.com",
+    "password": "12345678"
+  },
+  {
+    "id": 1738234436076,
+    "username": "newuser",
+    "email": "yon@gmail.com",
+    "password": "159159"
+  },
+  {
+    "id": 1738234542521,
+    "username": "dg",
+    "email": "sen@gmail.com",
+    "password": "55555555"
   }
 ]

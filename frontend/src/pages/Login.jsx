@@ -4,13 +4,14 @@ import '../components/Login.css';
 
 const Login = () => {
     const [formData, setFormData] = useState({
-        email: '',
+        username: '', // Changed from email to username (matching server)
         password: ''
     });
     const [error, setError] = useState('');
     
     const navigate = useNavigate();
 
+    // Handle input change
     const handleChange = (e) => {
         const { id, value } = e.target;
         setFormData(prevState => ({
@@ -19,12 +20,13 @@ const Login = () => {
         }));
     };
 
+    // Handle form submit
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError(''); // Clear previous errors
 
         try {
-            const response = await fetch('http://localhost:4000/login', {
+            const response = await fetch('http://127.0.0.1:4000/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)
@@ -32,11 +34,11 @@ const Login = () => {
 
             const data = await response.json();
 
-            if (data.success) {
-                console.log('Login successful:', data.user);
-                navigate('/video'); // Redirect to Video page
+            if (response.ok) {
+                console.log('Login successful:', data.message);
+                navigate('/video'); // Redirect to dashboard or another page
             } else {
-                setError('Invalid email or password.');
+                setError(data.error || 'Invalid username or password.');
             }
         } catch (error) {
             console.error('Login error:', error);
@@ -56,12 +58,12 @@ const Login = () => {
                 {error && <p className="errorText">{error}</p>} {/* Show errors */}
 
                 <div className="formGroup">
-                    <label htmlFor="email">Email</label>
+                    <label htmlFor="username">Username</label>
                     <input
-                        type="email"
-                        id="email"
-                        placeholder="Enter your email"
-                        value={formData.email}
+                        type="text"
+                        id="username"
+                        placeholder="Enter your username"
+                        value={formData.username}
                         onChange={handleChange}
                         required
                     />
