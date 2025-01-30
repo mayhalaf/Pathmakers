@@ -121,6 +121,38 @@ button:hover:not(:disabled) {
   transition: width 0.3s ease;
 }
 
+/* Navigation Buttons */
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between; /* Spread the buttons to opposite sides */
+  margin-top: 20px;
+}
+
+button {
+  background-color: #a367d3;
+  font-size: 14px;
+  padding: 8px 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  transition: background 0.3s ease-in-out;
+}
+
+button:disabled {
+  background-color: #bbb;
+  cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+  background-color: #6c3faf;
+}
+
+
+
 /* Animation */
 @keyframes fadeIn {
   from {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {
   ChevronRight,
+  ChevronLeft,
   MapPin,
   Plane,
   Hotel,
@@ -177,12 +178,20 @@ const TravelPlannerApp = () => {
             </div>
           ))}
         </div>
-        <button
-          onClick={() => setCurrentStep((prev) => prev + 1)}
-          disabled={currentStep === steps.length - 1 || !userResponses[steps[currentStep].questions[0].prompt]}
-        >
-          Next <ChevronRight />
-        </button>
+        <div className="navigation-buttons">
+          <button
+            onClick={() => setCurrentStep((prev) => prev - 1)} // Go to previous step
+            disabled={currentStep === 0}
+          >
+            <ChevronLeft /> Back
+          </button>
+          <button
+            onClick={() => setCurrentStep((prev) => prev + 1)} // Go to next step
+            disabled={currentStep === steps.length - 1 || !userResponses[steps[currentStep].questions[0].prompt]}
+          >
+            Next <ChevronRight />
+          </button>
+        </div>
       </div>
     );
   };
