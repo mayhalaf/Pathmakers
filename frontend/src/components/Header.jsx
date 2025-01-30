@@ -43,18 +43,19 @@ const Header = () => {
 
     return (
         <header className="header">
-            <div className="logo">
+        {/* ✅ Wrap logo in <Link> to navigate to main page */}
+        <div className="logo">
+            <Link to="/main">
                 <img src={logo} alt="Logo" />
-            </div>
+            </Link>
+        </div>
 
             {/* Hide menu on homepage, login, and signup pages */}
             {location.pathname !== "/" && location.pathname !== "/login" && location.pathname !== "/signup" && user && (
                 <nav className={`navbar ${isMenuOpen ? "show" : ""}`}>
-                    <Link to="/about">About</Link>
-                    <Link to="/chat">Chat</Link>
-                    <Link to="/personal-area">Personal Area</Link>
-                    <Link to="/video">Video</Link>
                     <Link to="/main">Main</Link>
+                    <Link to="/about">About</Link>
+                    <Link to="/video">Video</Link>
                     <Link to="/DownloadApp">Download App</Link>
                 </nav>
             )}
