@@ -1,5 +1,5 @@
 {
   "dependencies": {
-    "express-session": "^1.18.1"
+    "lucide-react": "^0.474.0"
   }
 }

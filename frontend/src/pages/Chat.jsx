@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import {
   ChevronRight,
-  ChevronLeft,
   MapPin,
   Plane,
   Hotel,
@@ -10,6 +10,8 @@ import {
   CreditCard,
   CheckCircle,
 } from "lucide-react";
+import logo from "../assets/Image20250119205452.png";
+import profilePlaceholder from "../assets/2151100205.jpg";
 import "../components/chat.css";
 
 const TravelPlannerApp = () => {
@@ -21,84 +23,72 @@ const TravelPlannerApp = () => {
   const [loadedAttractions, setLoadedAttractions] = useState([]);
   const [loadedTransportation, setLoadedTransportation] = useState([]);
   const [loadedPaymentOptions, setLoadedPaymentOptions] = useState([]);
+  const [user, setUser] = useState(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    // Fetch data from server endpoints
-    Promise.all([/* the fetch calls as you have them */])
-      .then(([citiesData, flightsData, hotelsData, attractionsData, transportationData, paymentOptionsData]) => {
+    // Fetch user data
+    const fetchUser = async () => {
+      try {
+        const response = await fetch("http://localhost:4000/user");
+        if (response.ok) {
+          const userData = await response.json();
+          setUser(userData);
+        } else {
+          setUser(null);
+        }
+      } catch (error) {
+        console.error("Error fetching user:", error);
+        setUser(null);
+      }
+    };
+
+    // Fetch travel data
+    const fetchTravelData = async () => {
+      try {
+        const [citiesData, flightsData, hotelsData, attractionsData, transportationData, paymentOptionsData] =
+          await Promise.all([
+            fetch("http://localhost:4000/cities").then((res) => res.json()),
+            fetch("http://localhost:4000/flights").then((res) => res.json()),
+            fetch("http://localhost:4000/hotels").then((res) => res.json()),
+            fetch("http://localhost:4000/attractions").then((res) => res.json()),
+            fetch("http://localhost:4000/transportation").then((res) => res.json()),
+            fetch("http://localhost:4000/payment-options").then((res) => res.json()),
+          ]);
+
         setLoadedCities(citiesData);
         setLoadedFlights(flightsData);
         setLoadedHotels(hotelsData);
         setLoadedAttractions(attractionsData);
         setLoadedTransportation(transportationData);
         setLoadedPaymentOptions(paymentOptionsData);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error("Error fetching data:", error);
-      });
+      }
+    };
+
+    fetchUser();
+    fetchTravelData();
   }, []);
 
-  const steps = [
-    {
-      label: "Destination",
-      questions: [
-        { prompt: "What is your departure city?", type: "text" },
-        {
-          prompt: "What is your destination city?",
-          options: Array.isArray(loadedCities) && loadedCities.length > 0
-            ? loadedCities
-            : ["Loading..."],
-        },
-      ],
-      icon: MapPin,
-    },
-    {
-      label: "Flight",
-      questions: [
-        { prompt: "Travel dates (departure)?", type: "date" },
-        {
-          prompt: "Travel dates (return)?",
-          type: "date",
-          validateDate: (departureDate, returnDate) => {
-            return new Date(returnDate) >= new Date(departureDate); // Ensures return date is after departure date
-          },
-        },
-        {
-          prompt: "Select your flight",
-          options: Array.isArray(loadedFlights) && loadedFlights.length > 0
-            ? loadedFlights.find(flight => flight.city === userResponses["What is your destination city?"])?.airlines.map(
-              airline => `${airline.name} - $${airline.price} (${airline.duration})`
-            ) || []
-            : ["Loading..."],
-        },
-        {
-          prompt: "Class preference",
-          options: ["Economy", "Business", "First"],
-        },
-      ],
-      icon: Plane,
-    },
-    // More steps here...
-  ];
-
-  const handleDateChange = (stepIndex, questionIndex, dateValue) => {
-    const newUserResponses = { ...userResponses };
-    newUserResponses[steps[stepIndex].questions[questionIndex].prompt] = dateValue;
-
-    // If it's the return date, validate it
-    if (steps[stepIndex].questions[questionIndex].prompt === "Travel dates (return)?" && userResponses["Travel dates (departure)?"]) {
-      const isValid = steps[stepIndex].questions[questionIndex].validateDate(
-        userResponses["Travel dates (departure)?"], 
-        dateValue
-      );
-      if (!isValid) {
-        alert("Return date must be after departure date!");
-        return;
-      }
+  const handleLogout = async () => {
+    try {
+      await fetch("http://localhost:4000/logout", { method: "POST" });
+      setUser(null);
+      navigate("/"); // Redirect to homepage after logout
+    } catch (error) {
+      console.error("Logout error:", error);
     }
-
-    setUserResponses(newUserResponses);
   };
+
+  const isActive = (path) => (location.pathname === path ? "active-link" : "");
+
+  const steps = [
+    // ... (same as your original steps array)
+  ];
 
   const renderProgressBar = () => (
     <div className="progress-bar">
@@ -111,7 +101,6 @@ const TravelPlannerApp = () => {
 
   const renderStepContent = () => {
     const step = steps[currentStep];
-
     if (step.label === "Trip Summary") {
       return (
         <div className="step">
@@ -127,16 +116,10 @@ const TravelPlannerApp = () => {
               </div>
             ))}
           </div>
-          <button
-            onClick={() => setCurrentStep(0)} // Reset to start over
-            disabled={currentStep === steps.length - 1}
-          >
-            Start Over
-          </button>
+          <button onClick={() => setCurrentStep(0)}>Start Over</button>
         </div>
       );
     }
-
     return (
       <div className="step">
         <div className="step-header">
@@ -152,7 +135,10 @@ const TravelPlannerApp = () => {
                   type={q.type}
                   value={userResponses[q.prompt] || ""}
                   onChange={(e) =>
-                    handleDateChange(currentStep, index, e.target.value)
+                    setUserResponses({
+                      ...userResponses,
+                      [q.prompt]: e.target.value,
+                    })
                   }
                 />
               ) : (
@@ -178,30 +164,89 @@ const TravelPlannerApp = () => {
             </div>
           ))}
         </div>
-        <div className="navigation-buttons">
-          <button
-            onClick={() => setCurrentStep((prev) => prev - 1)} // Go to previous step
-            disabled={currentStep === 0}
-          >
-            <ChevronLeft /> Back
-          </button>
-          <button
-            onClick={() => setCurrentStep((prev) => prev + 1)} // Go to next step
-            disabled={currentStep === steps.length - 1 || !userResponses[steps[currentStep].questions[0].prompt]}
-          >
-            Next <ChevronRight />
-          </button>
-        </div>
+        <button
+          onClick={() => setCurrentStep((prev) => prev + 1)}
+          disabled={
+            currentStep === steps.length - 1 ||
+            !userResponses[steps[currentStep].questions[0].prompt]
+          }
+        >
+          Next <ChevronRight />
+        </button>
       </div>
     );
   };
 
   return (
     <div className="containerCh">
-      <header>
-        <h1>Travel Planner</h1>
-        {renderProgressBar()}
+      <header className="header">
+        <div className="logo">
+          <Link to="/main">
+            <img src={logo} alt="Logo" />
+          </Link>
+        </div>
+        {location.pathname !== "/" &&
+          location.pathname !== "/login" &&
+          location.pathname !== "/signup" &&
+          user && (
+            <nav className={`navbar ${isMenuOpen ? "show" : ""}`}>
+              <Link to="/main" className={isActive("/main")}>
+                Main
+              </Link>
+              <Link to="/about" className={isActive("/about")}>
+                About
+              </Link>
+              <Link to="/chat" className={isActive("/chat")}>
+                Chat
+              </Link>
+              <Link to="/personal-area" className={isActive("/personal-area")}>
+                Personal Area
+              </Link>
+              <Link to="/video" className={isActive("/video")}>
+                Video
+              </Link>
+              <Link to="/DownloadApp" className={isActive("/DownloadApp")}>
+                Download App
+              </Link>
+            </nav>
+          )}
+        <div className="profile-section">
+          <img
+            src={user?.profileImage || profilePlaceholder}
+            alt="User"
+            className="profile-image"
+            onClick={() => setIsProfileOpen(!isProfileOpen)}
+          />
+          {isProfileOpen && (
+            <div className="profile-popup">
+              <p>Hello, Friend!</p>
+              {user ? (
+                <>
+                  <Link to="/personal-area">Go to Profile</Link>
+                  <button onClick={handleLogout} className="logoutButton">
+                    Log Out
+                  </button>
+                </>
+              ) : (
+                <Link to="/login">Log in</Link>
+              )}
+            </div>
+          )}
+        </div>
+        {location.pathname !== "/" && user && (
+          <button
+            className={`hamburger ${isMenuOpen ? "active" : ""}`}
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            <span className="line"></span>
+            <span className="line"></span>
+            <span className="line"></span>
+          </button>
+        )}
       </header>
+      <h1>Travel Planner</h1>
+      {renderProgressBar()}
       {renderStepContent()}
     </div>
   );
