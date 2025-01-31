@@ -1,9 +1,20 @@
 import express from 'express';
 import { promises as fs } from 'fs';
 import cors from 'cors';
-import session from "express-session";
 
-const app = express();
+
+const app = express(); // ✅ First initialize 'app'
+
+import session from "express-session"; // Import session here
+
+app.use(session({
+    secret: "your_secret_key",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }
+}));
+
+
 app.use(express.json());
 app.use(cors()); // Enable CORS for all routes
 
@@ -35,75 +46,32 @@ const writeJsonFile = async (filePath, data) => {
 };
 
 // **User Routes**
-app.get('/users', async (req, res) => {
-    const users = await readJsonFile(FILE_PATHS.users);
-    res.json(users);
-});
-app.get('/user', async (req, res) => {
-    try {
-        const users = await readJsonFile(FILE_PATHS.users);
-
-        // Simulating a logged-in user (You may replace this logic with authentication)
-        const user = users.length > 0 ? users[0] : null;
-
-        if (user) {
-            res.json({
-                username: user.username,
-                profileImage: user.profileImage || null, // Add a profile image if available
-            });
-        } else {
-            res.status(404).json({ error: 'User not found' });
-        }
-    } catch (error) {
-        res.status(500).json({ error: 'Error retrieving user data' });
-    }
-});
-
-
 app.post('/users', async (req, res) => {
     try {
         const users = await readJsonFile(FILE_PATHS.users);
         const { id, username, email, password } = req.body;
 
-        // Check if username or email already exists
         if (users.some(user => user.username === username || user.email === email)) {
-            return res.status(400).json({ error: 'Username or email already taken' });
+            return res.status(400).json({ error: "Username or email already taken" });
         }
 
-        // Add the new user
         const newUser = { id, username, email, password };
         users.push(newUser);
         await writeJsonFile(FILE_PATHS.users, users);
 
-        res.status(201).json({ 
-            message: 'User registered successfully', 
-            user: newUser 
-        });
+        res.status(201).json({ message: "User registered successfully", user: newUser });
     } catch (error) {
-        res.status(500).json({ error: 'Error registering user' });
+        res.status(500).json({ error: "Error registering user" });
     }
 });
 
 
-
-app.get("/user", async (req, res) => {
+app.post('/logout', (req, res) => {
     try {
-        const users = await readJsonFile(FILE_PATHS.users);
-
-        // Simulating an active logged-in user (fetch first user for now)
-        const user = users.length > 0 ? users[0] : null;
-
-        if (user) {
-            res.json({
-                username: user.username,
-                email: user.email,
-                profileImage: user.profileImage || null,
-            });
-        } else {
-            res.status(404).json({ error: "User not found" });
-        }
+        res.json({ message: "Logged out successfully" });
     } catch (error) {
-        res.status(500).json({ error: "Error retrieving user data" });
+        console.error("Logout error:", error);
+        res.status(500).json({ error: "Logout failed" });
     }
 });
 

@@ -36,7 +36,7 @@ const Login = () => {
     
             if (response.ok) {
                 console.log("Login successful:", data);
-                window.location.href = "/video"; // Refresh and navigate
+                window.location.href = "/main"; // Refresh and navigate
             } else {
                 setError("Invalid username or password.");
             }

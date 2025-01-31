@@ -43,15 +43,15 @@ const Header = () => {
 
     return (
         <header className="header">
-        {/* ✅ Wrap logo in <Link> to navigate to main page */}
-        <div className="logo">
-            <Link to="/main">
-                <img src={logo} alt="Logo" />
-            </Link>
-        </div>
+            {/* ✅ Wrap logo in <Link> to navigate to main page */}
+            <div className="logo">
+                <Link to="/main">
+                    <img src={logo} alt="Logo" />
+                </Link>
+            </div>
 
-            {/* Hide menu on homepage, login, and signup pages */}
-            {location.pathname !== "/" && location.pathname !== "/login" && location.pathname !== "/signup" && user && (
+            {/* ✅ Show menu only if NOT on homepage, login, or signup */}
+            {!["/", "/login", "/signup"].includes(location.pathname) && user && (
                 <nav className={`navbar ${isMenuOpen ? "show" : ""}`}>
                     <Link to="/main">Main</Link>
                     <Link to="/about">About</Link>
@@ -60,7 +60,7 @@ const Header = () => {
                 </nav>
             )}
 
-            {/* User Profile Section (Always Visible) */}
+            {/* ✅ User Profile Section (Always Visible) */}
             <div className="profile-section">
                 <img
                     src={user?.profileImage || profilePlaceholder}
@@ -85,8 +85,8 @@ const Header = () => {
                 )}
             </div>
 
-            {/* Hamburger Button for Mobile (Only Visible If Navbar is Visible) */}
-            {location.pathname !== "/" && user && (
+            {/* ✅ Hamburger Button for Mobile (Only Visible If Navbar is Visible) */}
+            {!["/", "/login", "/signup"].includes(location.pathname) && user && (
                 <button
                     className={`hamburger ${isMenuOpen ? "active" : ""}`}
                     onClick={() => setIsMenuOpen(!isMenuOpen)}

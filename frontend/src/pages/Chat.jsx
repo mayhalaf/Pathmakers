@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import {
-  ChevronRight,
-  MapPin,
-  Plane,
-  Hotel,
-  Compass,
-  Car,
-  CreditCard,
-  CheckCircle,
+  // ChevronRight,
+  // MapPin,
+  // Plane,
+  // Hotel,
+  // Compass,
+  // Car,
+  // CreditCard,
+  // CheckCircle,
 } from "lucide-react";
 import logo from "../assets/Image20250119205452.png";
 import profilePlaceholder from "../assets/2151100205.jpg";
