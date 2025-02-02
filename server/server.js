@@ -1,35 +1,57 @@
-import express from 'express';
-import { promises as fs } from 'fs';
-import cors from 'cors';
+import express from "express";
+import { promises as fs } from "fs";
+import cors from "cors";
+import session from "express-session";
+import cookieParser from "cookie-parser"; // ✅ Needed for handling session cookies
+import FileStorePkg from "session-file-store"; // ✅ Correct import for session-file-store
 
+const FileStore = FileStorePkg(session); // ✅ Correct initialization
+const app = express();
 
-const app = express(); // ✅ First initialize 'app'
+/* ---------------------- ✅ Correct Middleware Order ---------------------- */
 
-import session from "express-session"; // Import session here
-
-app.use(session({
-    secret: "your_secret_key",
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false }
+// ✅ 1. CORS must be first to allow frontend requests with credentials
+app.use(cors({
+    origin: "http://localhost:5173", // ✅ Match frontend
+    credentials: true, // ✅ Allow cookies (sessions)
 }));
 
+// ✅ 2. Parse cookies before using session middleware
+app.use(cookieParser());
 
+// ✅ 3. Initialize session storage with a persistent file store
+app.use(session({
+    secret: "your_secret_key", // ⚠️ Change in production
+    resave: false,
+    saveUninitialized: false,
+    store: new FileStore({
+        path: "./sessions", // ✅ Ensure session persistence
+        retries: 3,
+        ttl: 86400 // ✅ Keep sessions for 1 day
+    }),
+    cookie: {
+        secure: false, // ❌ Set to true ONLY if using HTTPS
+        httpOnly: true,
+        sameSite: "lax"
+    }
+}));
+
+// ✅ 4. Parse incoming JSON requests
 app.use(express.json());
-app.use(cors()); // Enable CORS for all routes
 
+/* ---------------------- ✅ File Paths ---------------------- */
 const FILE_PATHS = {
-    users: 'data/users.json',
-    cities: 'data/cities.json',
-    flights: 'data/flights.json',
-    hotels: 'data/hotels.json',
-    attractions: 'data/attractions.json'
+    users: "data/users.json",
+    cities: "data/cities.json",
+    flights: "data/flights.json",
+    hotels: "data/hotels.json",
+    attractions: "data/attractions.json"
 };
 
-// **Helper Functions for File Operations**
+/* ---------------------- ✅ Helper Functions ---------------------- */
 const readJsonFile = async (filePath) => {
     try {
-        const data = await fs.readFile(filePath, 'utf8');
+        const data = await fs.readFile(filePath, "utf8");
         return JSON.parse(data);
     } catch (error) {
         console.error(`Error reading ${filePath}:`, error);
@@ -45,8 +67,10 @@ const writeJsonFile = async (filePath, data) => {
     }
 };
 
-// **User Routes**
-app.post('/users', async (req, res) => {
+/* ---------------------- ✅ Authentication Routes ---------------------- */
+
+// **Register User**
+app.post("/users", async (req, res) => {
     try {
         const users = await readJsonFile(FILE_PATHS.users);
         const { id, username, email, password } = req.body;
@@ -65,68 +89,86 @@ app.post('/users', async (req, res) => {
     }
 });
 
+// **Login Route**
+app.post("/login", async (req, res) => {
+    const { username, password } = req.body;
+    const users = await readJsonFile(FILE_PATHS.users);
 
-app.post('/logout', (req, res) => {
-    try {
-        res.json({ message: "Logged out successfully" });
-    } catch (error) {
-        console.error("Logout error:", error);
-        res.status(500).json({ error: "Logout failed" });
+    const user = users.find(u => u.username === username && u.password === password);
+    
+    if (user) {
+        req.session.user = {
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            profileImage: user.profileImage || null
+        };
+
+        req.session.save(err => {
+            if (err) {
+                console.error("Session save error:", err);
+                return res.status(500).json({ error: "Session save failed" });
+            }
+            console.log("🔥 Session after login:", req.session);
+            res.json({ message: `Welcome ${user.username}!`, user: req.session.user });
+        });
+    } else {
+        res.status(401).json({ error: "Invalid authentication" });
     }
 });
 
+// **Get User Session**
+app.get("/user", (req, res) => {
+    console.log("🔥 Checking Session Data:", req.session);
+    console.log("🔑 Session ID:", req.sessionID);
+    console.log("🔍 Cookies Received:", req.cookies);
 
-app.delete('/users/:id', async (req, res) => {
+    if (!req.session || !req.session.user) {
+        console.log("❌ No active user session detected.");
+        return res.status(401).json({ error: "User not logged in" });
+    }
+
+    console.log("✅ User session found:", req.session.user);
+    res.json(req.session.user);
+});
+
+
+// **Logout Route**
+app.post("/logout", (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            console.error("Logout error:", err);
+            return res.status(500).json({ error: "Logout failed" });
+        }
+        res.clearCookie("connect.sid", { path: "/" }); // ✅ Ensure session cookie is deleted
+        res.json({ message: "Logged out successfully" });
+    });
+});
+
+/* ---------------------- ✅ Additional Routes ---------------------- */
+
+// **Delete User**
+app.delete("/users/:id", async (req, res) => {
     const users = await readJsonFile(FILE_PATHS.users);
     const { id } = req.params;
 
     const updatedUsers = users.filter(user => user.id !== parseInt(id));
-    if (users.length === updatedUsers.length) return res.status(404).json({ error: 'User not found' });
+    if (users.length === updatedUsers.length) {
+        return res.status(404).json({ error: "User not found" });
+    }
 
     await writeJsonFile(FILE_PATHS.users, updatedUsers);
     res.json({ message: `User with ID ${id} deleted successfully.` });
 });
 
-// **Login Route**
-app.post('/login', async (req, res) => {
-    const { username, password } = req.body;
-    const users = await readJsonFile(FILE_PATHS.users);
-    
-    const user = users.find(u => u.username === username && u.password === password);
-    
-    if (user) {
-        res.json({
-            message: `Welcome ${user.username}!`,
-            user: {
-                id: user.id,
-                username: user.username,
-                email: user.email,
-                profileImage: user.profileImage || null // Include profile image if available
-            }
-        });
-    } else {
-        res.status(401).json({ error: 'Invalid authentication' });
-    }
-});
-
-
 // **City Routes**
-app.get('/cities', async (req, res) => {
+app.get("/cities", async (req, res) => {
     const cities = await readJsonFile(FILE_PATHS.cities);
     res.json(cities);
 });
 
-app.get('/validateCity/:city', async (req, res) => {
-    const { city } = req.params;
-    const cities = await readJsonFile(FILE_PATHS.cities);
-
-    cities.includes(city)
-        ? res.json({ message: `Destination ${city} is valid.` })
-        : res.status(404).json({ error: `Destination ${city} is not valid.` });
-});
-
 // **Flights Routes**
-app.get('/flights/:city', async (req, res) => {
+app.get("/flights/:city", async (req, res) => {
     const { city } = req.params;
     const flights = await readJsonFile(FILE_PATHS.flights);
 
@@ -137,7 +179,7 @@ app.get('/flights/:city', async (req, res) => {
 });
 
 // **Hotel Routes**
-app.get('/validateHotel/:city', async (req, res) => {
+app.get("/validateHotel/:city", async (req, res) => {
     const { city } = req.params;
     const hotels = await readJsonFile(FILE_PATHS.hotels);
 
@@ -148,7 +190,7 @@ app.get('/validateHotel/:city', async (req, res) => {
 });
 
 // **Attractions Routes**
-app.get('/attractions/:city', async (req, res) => {
+app.get("/attractions/:city", async (req, res) => {
     const { city } = req.params;
     const attractions = await readJsonFile(FILE_PATHS.attractions);
 
@@ -158,50 +200,7 @@ app.get('/attractions/:city', async (req, res) => {
         : res.status(404).json({ error: `No attractions found for ${city}.` });
 });
 
-// **Enhanced Attractions Route**
-app.get('/attractions', async (req, res) => {
-    try {
-        const attractions = await readJsonFile(FILE_PATHS.attractions);
-        res.json(attractions);
-    } catch (error) {
-        res.status(500).json({ error: 'Unable to fetch attractions' });
-    }
-});
-
-// **Enhanced Flights Route**
-app.get('/flights', async (req, res) => {
-    try {
-        const flights = await readJsonFile(FILE_PATHS.flights);
-        res.json(flights);
-    } catch (error) {
-        res.status(500).json({ error: 'Unable to fetch flights' });
-    }
-});
-
-// **Enhanced Hotels Route**
-app.get('/hotels', async (req, res) => {
-    try {
-        const hotels = await readJsonFile(FILE_PATHS.hotels);
-        res.json(hotels);
-    } catch (error) {
-        res.status(500).json({ error: 'Unable to fetch hotels' });
-    }
-});
-
-// **Enhanced Cities Route**
-app.get('/all-cities', async (req, res) => {
-    try {
-        const cities = await readJsonFile(FILE_PATHS.cities);
-        res.json(cities);
-    } catch (error) {
-        res.status(500).json({ error: 'Unable to fetch cities' });
-    }
-});
-
-// **Start the Server**
-app.listen(4000, () => {
-    console.log('Server is running on http://localhost:4000');
-});
+// **Extra Routes**
 app.get("/payment-options", async (req, res) => {
     res.json([
         { id: 1, type: "Credit Card", accepted: true },
@@ -216,4 +215,9 @@ app.get("/transportation", async (req, res) => {
         { id: 2, method: "Train", available: true },
         { id: 3, method: "Bike Rental", available: false }
     ]);
+});
+
+/* ---------------------- ✅ Start the Server ---------------------- */
+app.listen(4000, () => {
+    console.log("✅ Server is running on http://localhost:4000");
 });
