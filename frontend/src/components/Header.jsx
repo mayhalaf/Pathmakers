@@ -14,33 +14,32 @@ const Header = () => {
     /* -------------------- ✅ Function to Fetch User Session -------------------- */
     const fetchUser = async () => {
         try {
+            console.log("Fetching user session...");
             const response = await fetch("http://localhost:4000/user", {
                 method: "GET",
-                credentials: "include", // ✅ Required to send session cookies
-                headers: { "Content-Type": "application/json" }
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                }
             });
-
+        
+            console.log("Response status:", response.status);
+            
             if (response.ok) {
                 const userData = await response.json();
-                console.log("✅ User session active:", userData);
+                console.log("User data received:", userData);
                 setUser(userData);
             } else {
-                console.warn("❌ No active session detected.");
+                console.log("Failed to fetch user:", response.status);
+                const errorData = await response.json();
+                console.log("Error details:", errorData);
                 setUser(null);
             }
         } catch (error) {
-            console.error("⚠️ Error fetching user session:", error);
+            console.error("Error fetching user session:", error);
             setUser(null);
         }
     };
-
-    /* -------------------- ✅ useEffect for Initial User Load & Auto Refresh -------------------- */
-    useEffect(() => {
-        fetchUser(); // Fetch user on mount
-
-        const interval = setInterval(fetchUser, 30000); // Auto-refresh session every 30s
-        return () => clearInterval(interval); // Cleanup on unmount
-    }, []);
 
     /* -------------------- ✅ useEffect for Route Changes -------------------- */
     useEffect(() => {
