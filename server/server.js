@@ -2,10 +2,10 @@ import express from "express";
 import fs from "fs";
 import cors from "cors";
 import session from "express-session";
-import cookieParser from "cookie-parser"; // ✅ Needed for handling session cookies
-import FileStorePkg from "session-file-store"; // ✅ Correct import for session-file-store
+import cookieParser from "cookie-parser"; 
+import FileStorePkg from "session-file-store"; 
 
-const FileStore = FileStorePkg(session); // ✅ Correct initialization
+const FileStore = FileStorePkg(session); 
 const app = express();
 
 /* ---------------------- ✅ Correct Middleware Order ---------------------- */
