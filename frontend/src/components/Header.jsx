@@ -15,35 +15,38 @@ const Header = () => {
     const fetchUser = async () => {
         try {
             console.log("Fetching user session...");
-            const response = await fetch("http://localhost:4000/user", {
-                method: "GET",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            });
-        
+            const response = await fetch("http://localhost:4000/users");
+    
             console.log("Response status:", response.status);
-            
+    
             if (response.ok) {
                 const userData = await response.json();
                 console.log("User data received:", userData);
                 setUser(userData);
             } else {
                 console.log("Failed to fetch user:", response.status);
-                const errorData = await response.json();
-                console.log("Error details:", errorData);
-                setUser(null);
+              setUser(null); // Ensure user state is reset
+    
+              // Safely check if the response has JSON
+               const errorText = await response.text();
+               try {
+                   const errorData = JSON.parse(errorText);
+                   console.log("Error details:", errorData);
+               } catch (err) {
+                   console.log("Error response is not JSON:", errorText);
+               }
             }
         } catch (error) {
             console.error("Error fetching user session:", error);
             setUser(null);
         }
     };
-
+    
     /* -------------------- ✅ useEffect for Route Changes -------------------- */
     useEffect(() => {
-        fetchUser(); // Fetch user when route changes
+        if (!user) {  // Prevents unnecessary API calls
+            fetchUser();
+        }
     }, [location]);
 
     /* -------------------- ✅ Handle Logout -------------------- */
@@ -70,6 +73,16 @@ const Header = () => {
     /* -------------------- ✅ Define Pages to Disable Menu & Logo -------------------- */
     const disabledPages = ["/about", "/signup", "/login"];
     const isDisabledPage = disabledPages.includes(location.pathname);
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (!event.target.closest(".profile-section")) {
+                setIsProfileOpen(false);
+            }
+        };
+
+        document.addEventListener("click", handleClickOutside);
+        return () => document.removeEventListener("click", handleClickOutside);
+    }, []);
 
     return (
         <header className="header">
@@ -118,7 +131,7 @@ const Header = () => {
                 )}
             </div>
 
-            {/* ✅ Hamburger Button for Mobile (Hidden before login & on disabled pages) */}
+            {/* ✅ Hamburger Button for Mocdbile (Hidden before login & on disabled pages) */}
             {!isDisabledPage && user && (
                 <button
                     className={`hamburger ${isMenuOpen ? "active" : ""}`}
