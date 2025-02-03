@@ -5,6 +5,7 @@ import session from "express-session";
 import cookieParser from "cookie-parser"; // ✅ Needed for handling session cookies
 import FileStorePkg from "session-file-store"; // ✅ Correct import for session-file-store
 
+
 const FileStore = FileStorePkg(session); // ✅ Correct initialization
 const app = express();
 
@@ -13,7 +14,7 @@ const app = express();
 // ✅ 1. CORS must be first to allow frontend requests with credentials
 // In your server code (Express)
 app.use(cors({
-    origin: ["http://localhost:5173", "http://localhost:3000", "http://127.0.0.1:5173"], // Add all possible frontend URLs
+    origin: ["http://localhost:5173", "http://localhost:4000", "http://127.0.0.1:5173"], // Add all possible frontend URLs
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
