@@ -13,24 +13,97 @@ const TravelPlannerApp = () => {
   const [loadedPaymentOptions, setLoadedPaymentOptions] = useState([]);
 
   useEffect(() => {
-    Promise.all([
-      fetch("http://localhost:4000/cities").then((res) => res.json()),
-      fetch("http://localhost:4000/flights").then((res) => res.json()),
-      fetch("http://localhost:4000/hotels").then((res) => res.json()),
-      fetch("http://localhost:4000/attractions").then((res) => res.json()),
-      fetch("http://localhost:4000/transportation").then((res) => res.json()),
-      fetch("http://localhost:4000/payment-options").then((res) => res.json()),
-    ])
-      .then(([citiesData, flightsData, hotelsData, attractionsData, transportationData, paymentOptionsData]) => {
-        setLoadedCities(citiesData);
-        setLoadedFlights(flightsData);
-        setLoadedHotels(hotelsData);
-        setLoadedAttractions(attractionsData);
-        setLoadedTransportation(transportationData);
-        setLoadedPaymentOptions(paymentOptionsData);
-      })
-      .catch((error) => console.error("Error fetching data:", error));
-  }, []);
+    async function fetchCities() {
+      try {
+        const response = await fetch("http://localhost:4000/cities");
+        if (!response.ok) {
+          throw new Error(`Failed to fetch cities, status: ${response.status}`);
+        }
+        const data = await response.json();
+        setLoadedCities(data);
+      } catch (error) {
+        console.error("Error fetching cities:", error);
+      }
+    }
+
+    async function fetchFlights(city) {
+      try {
+        const response = await fetch(`http://localhost:4000/flights/${city}`);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch flights, status: ${response.status}`);
+        }
+        const data = await response.json();
+        setLoadedFlights(data);
+      } catch (error) {
+        console.error("Error fetching flights:", error);
+      }
+    }
+
+    async function fetchHotels(city) {
+      try {
+        const response = await fetch(`http://localhost:4000/hotels/${city}`);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch hotels, status: ${response.status}`);
+        }
+        const data = await response.json();
+        setLoadedHotels(data);
+      } catch (error) {
+        console.error("Error fetching hotels:", error);
+      }
+    }
+
+    async function fetchAttractions(city) {
+      try {
+        const response = await fetch(`http://localhost:4000/attractions/${city}`);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch attractions, status: ${response.status}`);
+        }
+        const data = await response.json();
+        setLoadedAttractions(data);
+      } catch (error) {
+        console.error("Error fetching attractions:", error);
+      }
+    }
+
+    async function fetchTransportation() {
+      try {
+        const response = await fetch("http://localhost:4000/transportation");
+        if (!response.ok) {
+          throw new Error(`Failed to fetch transportation, status: ${response.status}`);
+        }
+        const data = await response.json();
+        setLoadedTransportation(data);
+      } catch (error) {
+        console.error("Error fetching transportation:", error);
+      }
+    }
+
+    async function fetchPaymentOptions() {
+      try {
+        const response = await fetch("http://localhost:4000/payment-options");
+        if (!response.ok) {
+          throw new Error(`Failed to fetch payment options, status: ${response.status}`);
+        }
+        const data = await response.json();
+        setLoadedPaymentOptions(data);
+      } catch (error) {
+        console.error("Error fetching payment options:", error);
+      }
+    }
+
+    async function fetchData() {
+      await Promise.all([
+        fetchCities(),
+        userResponses["What is your destination city?"] && fetchFlights(userResponses["What is your destination city?"]),
+        userResponses["What is your destination city?"] && fetchHotels(userResponses["What is your destination city?"]),
+        userResponses["What is your destination city?"] && fetchAttractions(userResponses["What is your destination city?"]),
+        fetchTransportation(),
+        fetchPaymentOptions(),
+      ]);
+    }
+
+    fetchData();
+  }, [userResponses]);
 
   const steps = [
     {
