@@ -103,6 +103,19 @@ app.post("/login", async (req, res) => {
     }
 });
 
+<<<<<<< HEAD
+=======
+  
+const initializeUserData = () => {
+    if (!fs.existsSync(FILE_PATHS.users)) {
+        const initialUsers = [{ id: 1, username: "admin", email: "admin@example.com", password: "admin123", profileImage: null }];
+        fs.writeFileSync(FILE_PATHS.users, JSON.stringify(initialUsers, null, 2));
+    }
+};
+
+initializeUserData();
+
+>>>>>>> 348564f577db0f41d6232fc6eb8a2012589259cd
 app.delete("/users/:id", async (req, res) => {
     try {
         const users = await readJsonFile(FILE_PATHS.users);
