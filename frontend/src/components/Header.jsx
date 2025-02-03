@@ -12,35 +12,25 @@ const Header = () => {
     const location = useLocation();
 
     /* -------------------- ✅ Function to Fetch User Session -------------------- */
-    const fetchUser = async () => {
-        try {
-            console.log("Fetching user session...");
-            const response = await fetch("http://localhost:4000/users");
-    
-            console.log("Response status:", response.status);
-    
-            if (response.ok) {
-                const userData = await response.json();
-                console.log("User data received:", userData);
-                setUser(userData);
-            } else {
-                console.log("Failed to fetch user:", response.status);
-              setUser(null); // Ensure user state is reset
-    
-              // Safely check if the response has JSON
-               const errorText = await response.text();
-               try {
-                   const errorData = JSON.parse(errorText);
-                   console.log("Error details:", errorData);
-               } catch (err) {
-                   console.log("Error response is not JSON:", errorText);
-               }
-            }
-        } catch (error) {
-            console.error("Error fetching user session:", error);
+  const fetchUser = async () => {
+    try {
+        const response = await fetch("http://localhost:4000/users", {
+            headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` }
+        });
+
+        if (response.ok) {
+            const userData = await response.json();
+            setUser(userData);
+        } else {
+            console.error("⚠️ Failed to fetch user:", response.status);
             setUser(null);
         }
-    };
+    } catch (error) {
+        console.error("⚠️ Error fetching user session:", error);
+        setUser(null);
+    }
+};
+
     
     /* -------------------- ✅ useEffect for Route Changes -------------------- */
     useEffect(() => {
@@ -49,26 +39,26 @@ const Header = () => {
         }
     }, [location]);
 
-    /* -------------------- ✅ Handle Logout -------------------- */
-    const handleLogout = async () => {
-        try {
-            const response = await fetch("http://localhost:4000/logout", {
-                method: "POST",
-                credentials: "include", // ✅ Ensures session cookies are included
-                headers: { "Content-Type": "application/json" }
-            });
+    /* -------------------- ✅ Handle Logout -------------------- */const handleLogout = async () => {
+    try {
+        const response = await fetch("http://localhost:4000/logout", {
+            method: "POST",
+            credentials: "include", // ✅ Ensure cookies are sent
+            headers: { "Content-Type": "application/json" }
+        });
 
-            if (!response.ok) {
-                throw new Error(`Logout failed: ${response.statusText}`);
-            }
-
-            console.log("✅ Successfully logged out.");
-            setUser(null);
-            navigate("/"); // Redirect to homepage after logout
-        } catch (error) {
-            console.error("⚠️ Logout error:", error);
+        if (!response.ok) {
+            throw new Error(`Logout failed: ${response.statusText}`);
         }
-    };
+
+        console.log("✅ Successfully logged out.");
+        setUser(null);
+        navigate("/"); // Redirect to homepage after logout
+    } catch (error) {
+        console.error("⚠️ Logout error:", error);
+    }
+};
+
 
     /* -------------------- ✅ Define Pages to Disable Menu & Logo -------------------- */
     const disabledPages = ["/about", "/signup", "/login"];

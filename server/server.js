@@ -105,6 +105,7 @@ app.post("/login", async (req, res) => {
     }
 });
 
+  
 const initializeUserData = () => {
     if (!fs.existsSync(FILE_PATHS.users)) {
         const initialUsers = [{ id: 1, username: "admin", email: "admin@example.com", password: "admin123", profileImage: null }];
