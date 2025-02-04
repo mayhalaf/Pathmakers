@@ -166,20 +166,6 @@ app.get('/hotels/:city', async (req, res) => {
     }
 });
 
-app.get('/hotels/:city', async (req, res) => {
-    const { city } = req.params;
-    try {
-        const hotelsData = await readJsonFile(FILE_PATHS.hotels);
-        const cityHotels = hotelsData.find(cityData => cityData.city.toLowerCase() === city.toLowerCase());
-        if (cityHotels) {
-            res.json(cityHotels.hotels);
-        } else {
-            res.status(404).json({ error: 'City not found' });
-        }
-    } catch (error) {
-        res.status(500).json({ error: 'Error fetching hotels' });
-    }
-});
 app.get('/attractions/:city', async (req, res) => {
     try {
         const { city } = req.params;

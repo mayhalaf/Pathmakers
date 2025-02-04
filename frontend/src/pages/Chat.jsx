@@ -25,6 +25,7 @@ const TravelPlannerApp = () => {
         console.error("Error fetching cities:", error);
       }
     }
+  
 
     async function fetchFlights(city) {
       try {
@@ -38,19 +39,32 @@ const TravelPlannerApp = () => {
         console.error("Error fetching flights:", error);
       }
     }
-
-    async function fetchHotels(city) {
-      try {
+  async function fetchHotels(city) {
+    if (!city) return; // ✅ Prevents fetching if no city is selected
+    try {
+        console.log(`Fetching hotels for city: ${city}`); // Debugging log
         const response = await fetch(`http://localhost:4000/hotels/${city}`);
         if (!response.ok) {
-          throw new Error(`Failed to fetch hotels, status: ${response.status}`);
+            throw new Error(`Failed to fetch hotels, status: ${response.status}`);
         }
         const data = await response.json();
+        console.log("Fetched hotels:", data); // ✅ Logs fetched data
         setLoadedHotels(data);
-      } catch (error) {
+    } catch (error) {
         console.error("Error fetching hotels:", error);
-      }
     }
+}
+async function fetchData() {
+  await Promise.all([
+      fetchCities(),
+      userResponses["What is your destination city?"] ? fetchFlights(userResponses["What is your destination city?"]) : null,
+      userResponses["What is your destination city?"] ? fetchHotels(userResponses["What is your destination city?"]) : null,
+      userResponses["What is your destination city?"] ? fetchAttractions(userResponses["What is your destination city?"]) : null,
+      fetchTransportation(),
+      fetchPaymentOptions(),
+  ]);
+}
+
 
     async function fetchAttractions(city) {
       try {
@@ -110,7 +124,7 @@ const TravelPlannerApp = () => {
       label: "Destination",
       icon: MapPin,
       questions: [
-        { prompt: "What is your departure city?", type: "text" },
+        { prompt: "What is your departure city?", options: loadedCities.length ? loadedCities : ["Loading..."], },
         {
           prompt: "What is your destination city?",
           options: loadedCities.length ? loadedCities : ["Loading..."],
@@ -141,16 +155,15 @@ const TravelPlannerApp = () => {
         {
           prompt: "Select your hotel",
           options: loadedHotels.length
-            ? loadedHotels
-                .find((hotel) => hotel.city === userResponses["What is your destination city?"])
-                ?.hotels.map((hotel) => `${hotel.name} - $${hotel.price}/night`) || []
-            : ["Loading..."],
+            ? loadedHotels.map((hotel) => `${hotel.name} - $${hotel.price}/night`)
+            : ["No hotels available"], // ✅ Changed from "Loading..."
         },
         { prompt: "Budget range per night?", type: "text" },
         { prompt: "Accessibility requirements?", options: ["None", "Wheelchair Access", "Ground Floor", "Special Assistance"] },
         { prompt: "Pet-friendly options?", options: ["Yes", "No"] },
       ],
-    },
+    }
+,    
     {
       label: "Attractions",
       icon: Compass,
@@ -230,11 +243,13 @@ const TravelPlannerApp = () => {
             <div key={index}>
               <label>{q.prompt}</label>
               {q.type === "text" || q.type === "date" ? (
-                <input
-                  type={q.type}
-                  value={userResponses[q.prompt] || ""}
-                  onChange={(e) => setUserResponses({ ...userResponses, [q.prompt]: e.target.value })}
-                />
+         <input
+         type={q.type}
+         value={userResponses[q.prompt] || ""}
+         min={q.prompt === "Travel dates (return)?" ? userResponses["Travel dates (departure)?"] : undefined}
+         onChange={(e) => setUserResponses({ ...userResponses, [q.prompt]: e.target.value })}
+       />
+       
               ) : (
                 <select
                   value={userResponses[q.prompt] || ""}
