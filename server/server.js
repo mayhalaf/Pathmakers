@@ -102,6 +102,10 @@ app.post("/login", async (req, res) => {
         res.status(500).json({ error: "Server error during login" });
     }
 });
+app.post("/logout", (req, res) => {
+    res.clearCookie("session"); // Adjust based on your auth method
+    res.json({ message: "Logged out successfully" });
+});
 
 app.delete("/users/:id", async (req, res) => {
     try {

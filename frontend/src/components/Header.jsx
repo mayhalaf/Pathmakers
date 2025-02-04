@@ -39,29 +39,29 @@ const Header = () => {
         }
     }, [location]);
 
-    /* -------------------- ✅ Handle Logout -------------------- */const handleLogout = async () => {
-    try {
-        const response = await fetch("http://localhost:4000/logout", {
-            method: "POST",
-            credentials: "include", // ✅ Ensure cookies are sent
-            headers: { "Content-Type": "application/json" }
-        });
-
-        if (!response.ok) {
-            throw new Error(`Logout failed: ${response.statusText}`);
+    /* -------------------- ✅ Handle Logout -------------------- */
+    const handleLogout = async () => {
+        try {
+            const response = await fetch("http://localhost:4000/logout", { // ✅ Use the correct logout route
+                method: "POST",
+                headers: { "Content-Type": "application/json" }
+            });
+    
+            if (!response.ok) {
+                throw new Error(`Logout failed: ${response.statusText}`);
+            }
+    
+            console.log("✅ Successfully logged out.");
+            setUser(null);
+            navigate("/"); // Redirect to homepage after logout
+        } catch (error) {
+            console.error("⚠️ Logout error:", error);
         }
-
-        console.log("✅ Successfully logged out.");
-        setUser(null);
-        navigate("/"); // Redirect to homepage after logout
-    } catch (error) {
-        console.error("⚠️ Logout error:", error);
-    }
-};
-
+    };
+    
 
     /* -------------------- ✅ Define Pages to Disable Menu & Logo -------------------- */
-    const disabledPages = ["/about", "/signup", "/login"];
+    const disabledPages = ["/", "/signup", "/login"];
     const isDisabledPage = disabledPages.includes(location.pathname);
     useEffect(() => {
         const handleClickOutside = (event) => {
