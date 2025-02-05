@@ -102,6 +102,7 @@ app.post("/login", async (req, res) => {
         res.status(500).json({ error: "Server error during login" });
     }
 });
+
 app.post("/logout", (req, res) => {
     res.clearCookie("session"); // Adjust based on your auth method
     res.json({ message: "Logged out successfully" });
@@ -166,23 +167,24 @@ app.get('/hotels/:city', async (req, res) => {
     }
 });
 
-app.get('/attractions/:city', async (req, res) => {
+app.get('/attractions/:city', (req, res) => {
     try {
-        const { city } = req.params;
-        const attractionsData = await readJsonFile(FILE_PATHS.attractions);
-        const attractionsInCity = attractionsData.find(cityData => cityData.city === city);
-
-        if (attractionsInCity) {
-            res.json(attractionsInCity.attractions);
-        } else {
-            res.status(500).send('Error fetching attractions');
-        }
+      const city = decodeURIComponent(req.params.city); // Decode city name
+      const attractions = dataFromDatabase[city];
+  
+      if (!attractions) {
+        console.log(`No attractions found for city: ${city}`);
+        return res.status(404).send({ error: `Attractions not found for city: ${city}` });
+      }
+  
+      res.json({ attractions });
     } catch (error) {
-        console.error("Error fetching attractions:", error);
-        res.status(500).json({ error: "Server error" });
+      console.error("Error fetching attractions:", error);
+      res.status(500).send({ error: "Internal Server Error" });
     }
-});
-
+  });
+  
+  
 app.get("/payment-options", async (req, res) => {
     res.json([
         { id: 1, type: "Credit Card", accepted: true },
