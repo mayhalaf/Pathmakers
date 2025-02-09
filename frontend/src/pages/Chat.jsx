@@ -66,18 +66,20 @@ async function fetchData() {
 }
 
 
-    async function fetchAttractions(city) {
-      try {
-        const response = await fetch(`http://localhost:4000/attractions/${city}`);
-        if (!response.ok) {
-          throw new Error(`Failed to fetch attractions, status: ${response.status}`);
-        }
-        const data = await response.json();
-        setLoadedAttractions(data);
-      } catch (error) {
-        console.error("Error fetching attractions:", error);
-      }
+async function fetchAttractions(city) {
+  if (!city) return; // Early return if no city selected
+  
+  try {
+    const response = await fetch(`http://localhost:4000/attractions/${city}`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch attractions, status: ${response.status}`);
     }
+    const data = await response.json();
+    setLoadedAttractions(data);
+  } catch (error) {
+    console.error("Error fetching attractions:", error);
+  }
+}
 
     async function fetchTransportation() {
       try {

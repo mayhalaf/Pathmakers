@@ -168,19 +168,13 @@ app.get('/hotels/:city', async (req, res) => {
 });
 
 app.get('/attractions/:city', (req, res) => {
-    try {
-      const city = decodeURIComponent(req.params.city); // Decode city name
-      const attractions = dataFromDatabase[city];
-  
-      if (!attractions) {
-        console.log(`No attractions found for city: ${city}`);
-        return res.status(404).send({ error: `Attractions not found for city: ${city}` });
-      }
-  
-      res.json({ attractions });
-    } catch (error) {
-      console.error("Error fetching attractions:", error);
-      res.status(500).send({ error: "Internal Server Error" });
+    const { city } = req.params;
+    const attractions = travelData.attractions[city];
+    
+    if (attractions) {
+      res.json(attractions);
+    } else {
+      res.status(404).json({ error: `No attractions found for ${city}` });
     }
   });
   
